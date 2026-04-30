@@ -41,6 +41,7 @@ EasyFrontEnd is a DSL-first AI visual frontend/UI designer. The current MVP supp
 - Auxiliary mock AI guided draft generation at `/start`.
 - DSL-rendered landing page preview.
 - Visual section selection, dragging, and editing.
+- Inspector smart suggestions with one-click deterministic local improvements.
 - Module ordering, hiding, duplication, deletion, and adding.
 - Desktop and mobile preview.
 - Deterministic quality score.
@@ -51,7 +52,7 @@ EasyFrontEnd is a DSL-first AI visual frontend/UI designer. The current MVP supp
 
 ## Current Active Plan
 
-The active execution plan is `docs/exec-plans/active/visual-editor-primary-drag-flow.md`.
+The active execution plan is `docs/exec-plans/active/actionable-smart-suggestions.md`.
 
 Completed plans are archived in `docs/exec-plans/completed/`.
 

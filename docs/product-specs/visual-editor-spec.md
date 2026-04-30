@@ -66,6 +66,8 @@ Style editing includes semantic controls:
 
 The inspector should surface whether the current module has clear copy, an obvious CTA, mobile crowding risk, contrast risk, missing conversion path, or a need for FAQ, pricing, or proof.
 
+MVP Smart Suggestions are deterministic assistant actions. They can apply conservative local improvements such as strengthening a Hero CTA, marking a Pricing plan as recommended, adding a proof quote, or improving a final CTA button. They must patch the selected module's DSL and never require prompt-only editing.
+
 ## Beginner Mode Limits
 
 Beginner mode is default. It does not show CSS classes, raw spacing units, z-index, Flex, Grid, or code as primary controls.

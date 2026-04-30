@@ -24,11 +24,12 @@ EasyFrontEnd has a working MVP and a public GitHub repository. The project is se
 - Visible button feedback for preview, AI optimization, module add/copy/move/hide/delete, backup, restore, reset, and export.
 - Editor-first home route; `/start` is now the auxiliary AI draft generator.
 - Section-level drag reorder from both the page structure tree and canvas, backed by the DSL mutation layer.
+- Inspector Smart Suggestions can apply deterministic local DSL patches for the selected module.
 - GitHub Actions CI, issue templates, PR template, and repository operations notes.
 
 ## Current Active Plan
 
-`docs/exec-plans/active/visual-editor-primary-drag-flow.md`
+`docs/exec-plans/active/actionable-smart-suggestions.md`
 
 ## Current Known Limits
 

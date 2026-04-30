@@ -27,6 +27,7 @@ type Props = {
   onContentPatch: (sectionId: string, patch: Record<string, unknown>) => void;
   onStylePatch: (sectionId: string, patch: Partial<SectionStyle>) => void;
   onThemePatch: (patch: Partial<ThemeTokens>) => void;
+  onSuggestionApplied?: (message: string) => void;
   suggestions: Array<{ id: string; message: string; targetSectionId?: string }>;
 };
 
@@ -36,6 +37,7 @@ export function InspectorPanel({
   onContentPatch,
   onStylePatch,
   onThemePatch,
+  onSuggestionApplied,
   suggestions,
 }: Props) {
   const [activeTab, setActiveTab] = useState<InspectorTab>("content");
@@ -89,7 +91,12 @@ export function InspectorPanel({
           />
         ) : null}
         {activeTab === "suggestions" ? (
-          <SmartSuggestions suggestions={sectionSuggestions} section={section} />
+          <SmartSuggestions
+            onContentPatch={onContentPatch}
+            onSuggestionApplied={onSuggestionApplied}
+            section={section}
+            suggestions={sectionSuggestions}
+          />
         ) : null}
       </div>
     </aside>
@@ -504,9 +511,13 @@ function StyleEditor({
 function SmartSuggestions({
   suggestions,
   section,
+  onContentPatch,
+  onSuggestionApplied,
 }: {
   suggestions: Array<{ id: string; message: string }>;
   section: SectionNode;
+  onContentPatch: (sectionId: string, patch: Record<string, unknown>) => void;
+  onSuggestionApplied?: (message: string) => void;
 }) {
   const fallback = [
     `${section.label} 的文案应当让用户一眼看懂结果。`,
@@ -515,6 +526,7 @@ function SmartSuggestions({
   ];
 
   const messages = suggestions.length > 0 ? suggestions.map((suggestion) => suggestion.message) : fallback;
+  const actions = buildSmartActions(section);
 
   return (
     <div className="space-y-3">
@@ -523,8 +535,220 @@ function SmartSuggestions({
           {message}
         </div>
       ))}
+      {actions.length > 0 ? (
+        <div className="space-y-3 pt-2">
+          <p className="text-xs font-semibold uppercase tracking-normal text-slate-500">可一键应用</p>
+          {actions.map((action) => (
+            <div className="rounded-lg border border-blue-100 bg-blue-50 p-3" key={action.id}>
+              <div className="text-sm font-semibold text-slate-950">{action.label}</div>
+              <p className="mt-1 text-xs leading-5 text-slate-600">{action.description}</p>
+              <Button
+                className="mt-3"
+                onClick={() => {
+                  onContentPatch(section.id, action.patch);
+                  onSuggestionApplied?.(`已应用建议：${action.label}`);
+                }}
+                size="sm"
+                variant="primary"
+              >
+                应用建议
+              </Button>
+            </div>
+          ))}
+        </div>
+      ) : null}
     </div>
   );
+}
+
+type SmartAction = {
+  id: string;
+  label: string;
+  description: string;
+  patch: Record<string, unknown>;
+};
+
+function buildSmartActions(section: SectionNode): SmartAction[] {
+  switch (section.type) {
+    case "header": {
+      const content = section.content as HeaderContent;
+      return [
+        {
+          id: "header-cta",
+          label: "强化导航行动按钮",
+          description: "让页头按钮更像明确行动，而不是普通链接。",
+          patch: { cta: { ...content.cta, label: strongerCta(content.cta.label) } },
+        },
+      ];
+    }
+    case "hero": {
+      const content = section.content as HeroContent;
+      return [
+        {
+          id: "hero-title",
+          label: "让首屏标题更像结果承诺",
+          description: "标题会更聚焦用户能获得的结果。",
+          patch: { title: strongerTitle(content.title) },
+        },
+        {
+          id: "hero-cta",
+          label: "强化首屏主按钮",
+          description: "主按钮会变成更明确的下一步行动。",
+          patch: {
+            primaryCta: { ...content.primaryCta, label: strongerCta(content.primaryCta.label) },
+          },
+        },
+      ];
+    }
+    case "pain_points": {
+      const content = section.content as PainPointsContent;
+      return [
+        {
+          id: "pain-title",
+          label: "让痛点标题更直接",
+          description: "用更清楚的问题表达帮助访客产生共鸣。",
+          patch: { title: strongerTitle(content.title) },
+        },
+      ];
+    }
+    case "feature_grid": {
+      const content = section.content as FeatureGridContent;
+      return [
+        {
+          id: "feature-subtitle",
+          label: "强调功能带来的业务价值",
+          description: "副标题会从功能罗列转向用户收益。",
+          patch: {
+            subtitle: content.subtitle.includes("价值")
+              ? content.subtitle
+              : `${content.subtitle} 每个功能都应对应一个清晰价值。`,
+          },
+        },
+      ];
+    }
+    case "social_proof": {
+      const content = section.content as SocialProofContent;
+      const hasQuotes = content.quotes.length > 0;
+      return [
+        {
+          id: "proof-quote",
+          label: hasQuotes ? "优化第一条客户评价" : "补一条客户评价",
+          description: "信任证明会更像真实用户反馈，而不是占位文字。",
+          patch: {
+            quotes: hasQuotes
+              ? content.quotes.map((quote, index) =>
+                  index === 0
+                    ? {
+                        ...quote,
+                        quote: "这个页面让我很快看懂价值，也知道下一步该怎么行动。",
+                        author: quote.author || "早期客户",
+                      }
+                    : quote,
+                )
+              : [
+                  {
+                    id: `${section.id}-quote-1`,
+                    quote: "这个页面让我很快看懂价值，也知道下一步该怎么行动。",
+                    author: "早期客户",
+                  },
+                ],
+          },
+        },
+      ];
+    }
+    case "pricing": {
+      const content = section.content as PricingContent;
+      const recommendedPlanId = content.plans.find((plan) => plan.recommended)?.id ?? content.plans[0]?.id;
+
+      if (!recommendedPlanId) {
+        return [];
+      }
+
+      return [
+        {
+          id: "pricing-recommend",
+          label: "突出一个推荐方案",
+          description: "降低访客选择成本，并强化推荐方案按钮。",
+          patch: {
+            plans: content.plans.map((plan) =>
+              plan.id === recommendedPlanId
+                ? { ...plan, recommended: true, ctaLabel: strongerCta(plan.ctaLabel) }
+                : { ...plan, recommended: false },
+            ),
+          },
+        },
+      ];
+    }
+    case "faq": {
+      const content = section.content as FAQContent;
+      return [
+        {
+          id: "faq-objection",
+          label: "补一个成交顾虑问题",
+          description: "增加一个常见疑问，帮助访客更放心地继续行动。",
+          patch: {
+            items: [
+              ...content.items,
+              {
+                id: `${section.id}-trust-faq`,
+                question: "如果我还不确定适不适合怎么办？",
+                answer: "可以先通过一次轻量咨询或体验，确认需求匹配后再决定下一步。",
+              },
+            ],
+          },
+        },
+      ];
+    }
+    case "cta": {
+      const content = section.content as CTASectionContent;
+      return [
+        {
+          id: "cta-button",
+          label: "强化最终行动按钮",
+          description: "最终按钮会更明确地推动访客继续。",
+          patch: { buttonLabel: strongerCta(content.buttonLabel) },
+        },
+      ];
+    }
+    case "footer":
+      return [];
+  }
+}
+
+function strongerCta(currentLabel: string) {
+  const trimmed = currentLabel.trim();
+
+  if (!trimmed) {
+    return "立即开始";
+  }
+
+  if (trimmed.startsWith("立即")) {
+    return trimmed;
+  }
+
+  if (trimmed.includes("预约")) {
+    return "立即预约体验";
+  }
+
+  if (trimmed.includes("试用")) {
+    return "立即免费试用";
+  }
+
+  return `立即${trimmed}`;
+}
+
+function strongerTitle(currentTitle: string) {
+  const trimmed = currentTitle.trim();
+
+  if (!trimmed) {
+    return "把核心价值讲清楚，让访客马上行动";
+  }
+
+  if (trimmed.includes("更清楚") || trimmed.includes("马上行动")) {
+    return trimmed;
+  }
+
+  return `${trimmed}，让访客更清楚下一步`;
 }
 
 function FieldStack({ children }: { children: React.ReactNode }) {

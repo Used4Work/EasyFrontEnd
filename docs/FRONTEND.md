@@ -29,6 +29,8 @@ The product should feel editor-first. AI actions should be secondary controls fo
 
 Drag reorder is section-level only in the MVP. It must mutate the DSL through `moveSectionToTarget`; do not introduce a separate visual ordering state.
 
+The inspector Smart Suggestions tab should prefer actionable, deterministic local improvements over generic advice. Each action must apply a small DSL patch through existing editor mutation callbacks.
+
 ## Current MVP Components
 
 - `EditorShell` owns transient editor UI state.

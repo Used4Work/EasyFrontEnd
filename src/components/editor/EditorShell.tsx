@@ -291,6 +291,7 @@ export function EditorShell() {
               updateProject(updateSectionContent(project, sectionId, patch))
             }
             onStylePatch={(sectionId, patch) => updateProject(updateSectionStyle(project, sectionId, patch))}
+            onSuggestionApplied={setSaveStatus}
             onThemePatch={(patch) => updateProject(updateTheme(project, patch))}
             project={project}
             section={selectedSection}
