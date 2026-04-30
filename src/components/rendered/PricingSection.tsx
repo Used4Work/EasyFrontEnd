@@ -28,7 +28,7 @@ export function PricingSection({ section, theme }: Props) {
                 )}`}
                 style={{ backgroundColor: theme.primaryColor }}
               >
-                Recommended
+                推荐
               </div>
             ) : null}
             <h3 className="text-xl font-semibold">{plan.name}</h3>

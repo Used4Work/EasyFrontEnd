@@ -46,10 +46,11 @@ EasyFrontEnd is a DSL-first AI visual frontend/UI designer. The current MVP supp
 - HTML and React/Tailwind export.
 - Local browser persistence for the active project DSL.
 - Portable project JSON export/import for moving edited DSL across devices.
+- Chinese customer-facing create, edit, score, preview, backup, restore, and export flow.
 
 ## Current Active Plan
 
-The active execution plan is `docs/exec-plans/active/customer-first-project-start.md`.
+The active execution plan is `docs/exec-plans/active/browser-smoke-and-interaction-hardening.md`.
 
 Completed plans are archived in `docs/exec-plans/completed/`.
 
@@ -73,7 +74,7 @@ This verifies required repo context and runs lint, typecheck, tests, and build.
 
 If any of those matter, record the decision in docs or move it into a versioned file before switching devices.
 
-To preserve an edited page across devices, use the editor's `Backup` action on the old device and `Restore` on the new device.
+To preserve an edited page across devices, use the editor's `备份` action on the old device and `恢复` on the new device.
 
 ## Handoff Rule
 

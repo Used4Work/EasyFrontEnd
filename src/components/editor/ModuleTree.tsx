@@ -30,8 +30,8 @@ export function ModuleTree({
   return (
     <aside className="flex min-h-0 w-72 flex-col border-r border-slate-200 bg-white">
       <div className="border-b border-slate-200 p-4">
-        <h2 className="text-sm font-semibold text-slate-950">Page Structure</h2>
-        <p className="mt-1 text-xs leading-5 text-slate-500">Business modules, not design layers.</p>
+        <h2 className="text-sm font-semibold text-slate-950">页面结构</h2>
+        <p className="mt-1 text-xs leading-5 text-slate-500">按业务模块编辑，不需要理解图层。</p>
       </div>
       <div className="min-h-0 flex-1 space-y-2 overflow-auto p-3">
         {sections.map((section, index) => (
@@ -50,49 +50,54 @@ export function ModuleTree({
             >
               <span>
                 <span className="block text-sm font-semibold text-slate-900">{section.label}</span>
-                <span className="text-xs text-slate-500">{section.type.replace("_", " ")}</span>
+                <span className="text-xs text-slate-500">{sectionTypeLabel(section.type)}</span>
               </span>
               <span className="text-xs text-slate-400">{index + 1}</span>
             </button>
             <div className="mt-2 grid grid-cols-5 gap-1">
               <Button
-                aria-label={`Move ${section.label} up`}
+                aria-label={`上移 ${section.label}`}
                 disabled={index === 0}
                 onClick={() => onMove(section.id, "up")}
                 size="sm"
+                title="上移"
                 variant="ghost"
               >
                 ↑
               </Button>
               <Button
-                aria-label={`Move ${section.label} down`}
+                aria-label={`下移 ${section.label}`}
                 disabled={index === sections.length - 1}
                 onClick={() => onMove(section.id, "down")}
                 size="sm"
+                title="下移"
                 variant="ghost"
               >
                 ↓
               </Button>
               <Button
-                aria-label={`${section.style.visible ? "Hide" : "Show"} ${section.label}`}
+                aria-label={`${section.style.visible ? "隐藏" : "显示"} ${section.label}`}
                 onClick={() => onToggleVisibility(section.id)}
                 size="sm"
+                title={section.style.visible ? "隐藏" : "显示"}
                 variant="ghost"
               >
                 {section.style.visible ? "◐" : "○"}
               </Button>
               <Button
-                aria-label={`Duplicate ${section.label}`}
+                aria-label={`复制 ${section.label}`}
                 onClick={() => onDuplicate(section.id)}
                 size="sm"
+                title="复制"
                 variant="ghost"
               >
                 ⧉
               </Button>
               <Button
-                aria-label={`Delete ${section.label}`}
+                aria-label={`删除 ${section.label}`}
                 onClick={() => onDelete(section.id)}
                 size="sm"
+                title="删除"
                 variant="danger"
               >
                 ×
@@ -103,7 +108,7 @@ export function ModuleTree({
       </div>
       <div className="border-t border-slate-200 p-3">
         <label className="text-xs font-semibold uppercase tracking-normal text-slate-500" htmlFor="add-section">
-          Add Module
+          添加模块
         </label>
         <select
           className="mt-2 w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm"
@@ -117,14 +122,30 @@ export function ModuleTree({
             }
           }}
         >
-          <option value="">Choose module</option>
+          <option value="">选择模块</option>
           {addableTypes.map((type) => (
             <option key={type} value={type}>
-              {type.replace("_", " ")}
+              {sectionTypeLabel(type)}
             </option>
           ))}
         </select>
       </div>
     </aside>
+  );
+}
+
+function sectionTypeLabel(type: SectionType) {
+  return (
+    {
+      header: "页头导航",
+      hero: "首屏",
+      pain_points: "用户痛点",
+      feature_grid: "功能亮点",
+      social_proof: "信任证明",
+      pricing: "价格方案",
+      faq: "常见问题",
+      cta: "最终行动",
+      footer: "页脚",
+    }[type] ?? type
   );
 }

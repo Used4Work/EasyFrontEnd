@@ -47,8 +47,8 @@ export function InspectorPanel({
   if (!section) {
     return (
       <aside className="w-80 border-l border-slate-200 bg-white p-5">
-        <h2 className="text-sm font-semibold">Inspector</h2>
-        <p className="mt-2 text-sm leading-6 text-slate-500">Select a module on the canvas or structure tree.</p>
+        <h2 className="text-sm font-semibold">属性面板</h2>
+        <p className="mt-2 text-sm leading-6 text-slate-500">请先在画布或页面结构中选择一个模块。</p>
       </aside>
     );
   }
@@ -56,14 +56,14 @@ export function InspectorPanel({
   return (
     <aside className="flex min-h-0 w-96 flex-col border-l border-slate-200 bg-white">
       <div className="border-b border-slate-200 p-4">
-        <p className="text-xs font-semibold uppercase tracking-normal text-slate-500">Selected Module</p>
+        <p className="text-xs font-semibold uppercase tracking-normal text-slate-500">当前模块</p>
         <h2 className="mt-1 text-base font-semibold text-slate-950">{section.label}</h2>
       </div>
       <div className="grid grid-cols-3 gap-1 border-b border-slate-200 p-2">
         {([
-          ["content", "Content"],
-          ["style", "Style"],
-          ["suggestions", "Smart Tips"],
+          ["content", "内容"],
+          ["style", "样式"],
+          ["suggestions", "智能建议"],
         ] as const).map(([tab, label]) => (
           <Button
             className={cn(activeTab === tab && "bg-slate-900 text-white hover:bg-slate-900")}
@@ -150,7 +150,7 @@ function ContentEditor({
         <FieldStack>
           <TextArea label="Section Title" value={content.title} onChange={(title) => patch({ title })} />
           {content.items.map((item, index) => (
-            <GroupedFields key={item.id} title={`Pain Point ${index + 1}`}>
+            <GroupedFields key={item.id} title={`痛点 ${index + 1}`}>
               <TextField
                 label="Title"
                 value={item.title}
@@ -185,7 +185,7 @@ function ContentEditor({
           <TextArea label="Section Title" value={content.title} onChange={(title) => patch({ title })} />
           <TextArea label="Subtitle" value={content.subtitle} onChange={(subtitle) => patch({ subtitle })} />
           {content.features.map((feature, index) => (
-            <GroupedFields key={feature.id} title={`Feature ${index + 1}`}>
+            <GroupedFields key={feature.id} title={`功能 ${index + 1}`}>
               <TextField
                 label="Title"
                 value={feature.title}
@@ -230,7 +230,7 @@ function ContentEditor({
         <FieldStack>
           <TextArea label="Section Title" value={content.title} onChange={(title) => patch({ title })} />
           {content.quotes.map((quote, index) => (
-            <GroupedFields key={quote.id} title={`Quote ${index + 1}`}>
+            <GroupedFields key={quote.id} title={`评价 ${index + 1}`}>
               <TextArea
                 label="Quote"
                 value={quote.quote}
@@ -265,7 +265,7 @@ function ContentEditor({
           <TextArea label="Section Title" value={content.title} onChange={(title) => patch({ title })} />
           <TextArea label="Subtitle" value={content.subtitle} onChange={(subtitle) => patch({ subtitle })} />
           {content.plans.map((plan, index) => (
-            <GroupedFields key={plan.id} title={`Plan ${index + 1}`}>
+            <GroupedFields key={plan.id} title={`方案 ${index + 1}`}>
               <TextField
                 label="Plan Name"
                 value={plan.name}
@@ -332,7 +332,7 @@ function ContentEditor({
                   }
                   type="checkbox"
                 />
-                Recommended plan
+                推荐方案
               </label>
             </GroupedFields>
           ))}
@@ -345,7 +345,7 @@ function ContentEditor({
         <FieldStack>
           <TextArea label="Section Title" value={content.title} onChange={(title) => patch({ title })} />
           {content.items.map((item, index) => (
-            <GroupedFields key={item.id} title={`FAQ ${index + 1}`}>
+            <GroupedFields key={item.id} title={`问题 ${index + 1}`}>
               <TextArea
                 label="Question"
                 value={item.question}
@@ -418,10 +418,10 @@ function StyleEditor({
           onStylePatch(section.id, { background: background as SectionStyle["background"] })
         }
         options={[
-          ["default", "Default"],
-          ["muted", "Soft"],
-          ["primary", "Primary"],
-          ["dark", "Dark"],
+          ["default", "默认"],
+          ["muted", "柔和"],
+          ["primary", "主色"],
+          ["dark", "深色"],
         ]}
         value={section.style.background}
       />
@@ -429,10 +429,10 @@ function StyleEditor({
         label="Layout Variant"
         onChange={(layout) => onStylePatch(section.id, { layout: layout as SectionStyle["layout"] })}
         options={[
-          ["stacked", "Stacked"],
-          ["split", "Split"],
-          ["grid", "Grid"],
-          ["centered", "Centered"],
+          ["stacked", "上下排列"],
+          ["split", "左右分栏"],
+          ["grid", "网格"],
+          ["centered", "居中"],
         ]}
         value={section.style.layout}
       />
@@ -442,9 +442,9 @@ function StyleEditor({
           onStylePatch(section.id, { cardStyle: cardStyle as SectionStyle["cardStyle"] })
         }
         options={[
-          ["flat", "Flat"],
-          ["bordered", "Bordered"],
-          ["elevated", "Elevated"],
+          ["flat", "简洁"],
+          ["bordered", "描边"],
+          ["elevated", "浮起"],
         ]}
         value={section.style.cardStyle}
       />
@@ -452,15 +452,15 @@ function StyleEditor({
         label="Spacing Density"
         onChange={(spacing) => onStylePatch(section.id, { spacing: spacing as SectionStyle["spacing"] })}
         options={[
-          ["compact", "Compact"],
-          ["standard", "Standard"],
-          ["comfortable", "Comfortable"],
+          ["compact", "紧凑"],
+          ["standard", "标准"],
+          ["comfortable", "宽松"],
         ]}
         value={section.style.spacing}
       />
       <div>
         <label className="text-sm font-medium text-slate-700" htmlFor="primary-color">
-          Primary Color
+          主色
         </label>
         <div className="mt-2 flex items-center gap-2">
           <input
@@ -477,11 +477,11 @@ function StyleEditor({
         label="Corner Style"
         onChange={(radius) => onThemePatch({ radius: radius as ThemeTokens["radius"] })}
         options={[
-          ["none", "None"],
-          ["small", "Small"],
-          ["medium", "Medium"],
-          ["large", "Large"],
-          ["pill", "Pill"],
+          ["none", "无圆角"],
+          ["small", "小圆角"],
+          ["medium", "中等圆角"],
+          ["large", "大圆角"],
+          ["pill", "胶囊"],
         ]}
         value={project.theme.radius}
       />
@@ -489,11 +489,11 @@ function StyleEditor({
         label="Overall Tone"
         onChange={(tone) => onThemePatch({ tone: tone as ThemeTokens["tone"] })}
         options={[
-          ["business", "Business"],
-          ["modern_saas", "Modern SaaS"],
-          ["education", "Education"],
-          ["playful", "Playful"],
-          ["premium", "Premium"],
+          ["business", "商务稳重"],
+          ["modern_saas", "现代 SaaS"],
+          ["education", "教育亲和"],
+          ["playful", "轻松活泼"],
+          ["premium", "高端专业"],
         ]}
         value={project.theme.tone}
       />
@@ -509,9 +509,9 @@ function SmartSuggestions({
   section: SectionNode;
 }) {
   const fallback = [
-    `${section.label} copy should make the user outcome clear.`,
-    "Make the next action visible and specific.",
-    "Check the mobile preview if this module has several cards or long text.",
+    `${section.label} 的文案应当让用户一眼看懂结果。`,
+    "按钮文案要具体，让访客知道下一步做什么。",
+    "如果模块里卡片或长文案较多，请检查手机预览是否拥挤。",
   ];
 
   const messages = suggestions.length > 0 ? suggestions.map((suggestion) => suggestion.message) : fallback;
@@ -550,11 +550,12 @@ function TextField({
   onChange: (value: string) => void;
 }) {
   const id = label.toLowerCase().replaceAll(" ", "-");
+  const labelText = fieldLabel(label);
 
   return (
     <div>
       <label className="text-sm font-medium text-slate-700" htmlFor={id}>
-        {label}
+        {labelText}
       </label>
       <input
         className="mt-2 w-full rounded-md border border-slate-200 px-3 py-2 text-sm text-slate-900 outline-none focus:border-blue-400"
@@ -576,11 +577,12 @@ function TextArea({
   onChange: (value: string) => void;
 }) {
   const id = label.toLowerCase().replaceAll(" ", "-");
+  const labelText = fieldLabel(label);
 
   return (
     <div>
       <label className="text-sm font-medium text-slate-700" htmlFor={id}>
-        {label}
+        {labelText}
       </label>
       <textarea
         className="mt-2 min-h-24 w-full rounded-md border border-slate-200 px-3 py-2 text-sm leading-6 text-slate-900 outline-none focus:border-blue-400"
@@ -604,11 +606,12 @@ function SelectField({
   onChange: (value: string) => void;
 }) {
   const id = label.toLowerCase().replaceAll(" ", "-");
+  const labelText = fieldLabel(label);
 
   return (
     <div>
       <label className="text-sm font-medium text-slate-700" htmlFor={id}>
-        {label}
+        {labelText}
       </label>
       <select
         className="mt-2 w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900"
@@ -623,5 +626,37 @@ function SelectField({
         ))}
       </select>
     </div>
+  );
+}
+
+function fieldLabel(label: string) {
+  return (
+    {
+      Brand: "品牌名称",
+      "Header CTA": "导航按钮",
+      Eyebrow: "小标题",
+      Title: "标题",
+      Subtitle: "副标题",
+      "Primary Button": "主按钮",
+      "Secondary Button": "次按钮",
+      "Image Placeholder": "图片占位说明",
+      "Section Title": "模块标题",
+      Description: "描述",
+      "Icon Placeholder": "图标占位",
+      Quote: "客户评价",
+      Author: "署名",
+      "Plan Name": "方案名称",
+      Price: "价格",
+      Benefits: "权益列表",
+      Button: "按钮文案",
+      Question: "问题",
+      Answer: "答案",
+      "Module Background": "模块背景",
+      "Layout Variant": "布局样式",
+      "Card Style": "卡片风格",
+      "Spacing Density": "间距密度",
+      "Corner Style": "圆角",
+      "Overall Tone": "整体语气",
+    }[label] ?? label
   );
 }

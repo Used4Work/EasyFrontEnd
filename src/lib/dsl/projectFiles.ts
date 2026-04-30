@@ -22,7 +22,7 @@ export const exportProjectFileJson = (
   const validation = validateProject(project);
 
   if (!validation.valid) {
-    throw new Error(`Cannot export invalid project: ${validation.issues[0]?.message}`);
+    throw new Error(`无法备份无效项目：${validation.issues[0]?.message}`);
   }
 
   const file: EasyFrontendProjectFile = {
@@ -41,14 +41,14 @@ export const parseProjectFileJson = (rawJson: string): ParseProjectFileResult =>
   try {
     parsed = JSON.parse(rawJson);
   } catch {
-    return { ok: false, reason: "Project file is not valid JSON." };
+    return { ok: false, reason: "项目备份文件不是有效的 JSON。" };
   }
 
   if (isProjectFile(parsed)) {
     if (parsed.version !== projectFileVersion) {
       return {
         ok: false,
-        reason: `Unsupported project file version: ${String(parsed.version)}.`,
+        reason: `不支持的项目备份版本：${String(parsed.version)}。`,
       };
     }
 
@@ -57,7 +57,7 @@ export const parseProjectFileJson = (rawJson: string): ParseProjectFileResult =>
     if (!validation.valid) {
       return {
         ok: false,
-        reason: validation.issues[0]?.message ?? "Project file failed validation.",
+        reason: validation.issues[0]?.message ?? "项目备份校验失败。",
       };
     }
 
@@ -70,7 +70,7 @@ export const parseProjectFileJson = (rawJson: string): ParseProjectFileResult =>
     if (!validation.valid) {
       return {
         ok: false,
-        reason: validation.issues[0]?.message ?? "Project DSL failed validation.",
+        reason: validation.issues[0]?.message ?? "项目 DSL 校验失败。",
       };
     }
 
@@ -79,20 +79,24 @@ export const parseProjectFileJson = (rawJson: string): ParseProjectFileResult =>
 
   return {
     ok: false,
-    reason: "Project file must contain an EasyFrontEnd project.",
+    reason: "项目备份文件必须包含 EasyFrontEnd 项目。",
   };
 };
 
 export const createProjectFileName = (project: EasyFrontendProject) => {
-  const safeName = project.name
+  const nameStem = toSafeFileStem(project.name);
+  const safeName = nameStem.length >= 3 ? nameStem : toSafeFileStem(project.id);
+
+  return `${safeName || "easyfrontend-project"}.easyfrontend.json`;
+};
+
+const toSafeFileStem = (value: string) =>
+  value
     .trim()
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-+|-+$/g, "")
     .slice(0, 64);
-
-  return `${safeName || "easyfrontend-project"}.easyfrontend.json`;
-};
 
 const isProjectFile = (value: unknown): value is EasyFrontendProjectFile => {
   if (!isRecord(value)) {

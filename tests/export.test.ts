@@ -22,7 +22,7 @@ describe("exporters", () => {
     const output = exportReactTailwind(sampleProject);
 
     expect(output).toContain("LandingPage");
-    expect(output).toContain("Turn your expertise into a polished AI course landing page");
-    expect(output).toContain("Choose the starting point that fits your launch");
+    expect(output).toContain("把零散 AI 知识变成能上手的实战能力");
+    expect(output).toContain("选择适合当前阶段的方案");
   });
 });

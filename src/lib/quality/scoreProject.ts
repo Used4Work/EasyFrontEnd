@@ -48,21 +48,21 @@ function scoreStructure(
 
   requiredLandingSections.forEach((type) => {
     if (!existingTypes.has(type)) {
-      issues.push(`Missing ${type.replace("_", " ")} section.`);
+      issues.push(`缺少${sectionTypeLabel(type)}模块。`);
       suggestions.push({
         id: `add-${type}`,
         severity: "medium",
-        message: `建议增加 ${type.replace("_", " ")} 模块，让落地页结构更完整。`,
+        message: `建议增加${sectionTypeLabel(type)}模块，让落地页结构更完整。`,
       });
     }
   });
 
   if (!existingTypes.has("social_proof")) {
-    issues.push("Missing social proof section.");
+    issues.push("缺少信任证明模块。");
     suggestions.push({
       id: "add-social-proof",
       severity: "low",
-      message: "建议增加 proof 或客户反馈模块，降低访客决策风险。",
+      message: "建议增加信任证明或客户反馈模块，降低访客决策风险。",
     });
   }
 
@@ -83,21 +83,21 @@ function scoreVisualHierarchy(
   if (hero) {
     const content = hero.content as HeroContent;
     if (content.title.length > 95) {
-      issues.push("Hero title is too long.");
+      issues.push("首屏标题过长。");
       suggestions.push({
         id: "shorten-hero-title",
         severity: "medium",
         targetSectionId: hero.id,
-        message: "Hero 标题偏长，建议压缩成一个更直接的结果承诺。",
+        message: "首屏标题偏长，建议压缩成一个更直接的结果承诺。",
       });
     }
     if (content.title.length < 16) {
-      issues.push("Hero title may be too vague.");
+      issues.push("首屏标题可能不够具体。");
       suggestions.push({
         id: "clarify-hero-title",
         severity: "medium",
         targetSectionId: hero.id,
-        message: "Hero 标题偏短，建议明确目标用户和核心收益。",
+        message: "首屏标题偏短，建议明确目标用户和核心收益。",
       });
     }
   }
@@ -107,7 +107,7 @@ function scoreVisualHierarchy(
   ).length;
 
   if (primaryBackgroundCount > 2) {
-    issues.push("Too many sections use the primary background.");
+    issues.push("使用主色背景的模块过多，页面层级可能变弱。");
   }
 
   return { name: "Visual Hierarchy", score: clampScore(100 - issues.length * 12), issues };
@@ -120,19 +120,19 @@ function scoreCta(project: EasyFrontendProject, suggestions: QualitySuggestion[]
   const labels = collectCtaLabels(project);
 
   if (!hero) {
-    issues.push("Hero section is missing.");
+    issues.push("缺少首屏模块。");
   } else {
     const content = hero.content as HeroContent;
     if (!content.primaryCta.label.trim()) {
-      issues.push("Hero section has no primary CTA.");
+      issues.push("首屏缺少主按钮文案。");
       suggestions.push({
         id: "add-hero-cta",
         severity: "high",
         targetSectionId: hero.id,
-        message: "Hero 缺少主按钮文案，访客不知道下一步该做什么。",
+        message: "首屏缺少主按钮文案，访客不知道下一步该做什么。",
       });
     } else if (hasWeakCtaLabel(content.primaryCta.label)) {
-      issues.push("Hero section has weak CTA text.");
+      issues.push("首屏主按钮文案偏弱。");
       suggestions.push({
         id: "improve-hero-cta",
         severity: "medium",
@@ -143,15 +143,15 @@ function scoreCta(project: EasyFrontendProject, suggestions: QualitySuggestion[]
   }
 
   if (!cta) {
-    issues.push("Final CTA section is missing.");
+    issues.push("缺少最终行动模块。");
   }
 
   if (labels.length < 3) {
-    issues.push("Page has too few conversion actions.");
+    issues.push("页面转化按钮偏少。");
     suggestions.push({
       id: "increase-cta-path",
       severity: "medium",
-      message: "页面转化路径偏少，建议在 Hero、Pricing 和最终 CTA 都保留清晰按钮。",
+      message: "页面转化路径偏少，建议在首屏、价格方案和最终行动模块都保留清晰按钮。",
     });
   }
 
@@ -168,7 +168,7 @@ function scoreResponsive(
   const pricing = findVisibleSection(project, "pricing");
 
   if (features && (features.content as FeatureGridContent).features.length > 6) {
-    issues.push("Feature grid may be dense on mobile.");
+    issues.push("功能卡片在移动端可能偏拥挤。");
     suggestions.push({
       id: "condense-features-mobile",
       severity: "low",
@@ -178,15 +178,15 @@ function scoreResponsive(
   }
 
   if (faq && (faq.content as FAQContent).items.length > 6) {
-    issues.push("FAQ list may be long on mobile.");
+    issues.push("FAQ 列表在移动端可能过长。");
   }
 
   if (pricing && (pricing.content as PricingContent).plans.length > 3) {
-    issues.push("Pricing has many plans for mobile scanning.");
+    issues.push("价格方案数量较多，移动端浏览成本可能偏高。");
   }
 
   if (visibleSections(project).length > 10) {
-    issues.push("Page has many visible sections for a first version.");
+    issues.push("当前可见模块较多，第一版页面可能偏长。");
   }
 
   return { name: "Responsive Readiness", score: clampScore(100 - issues.length * 10), issues };
@@ -201,7 +201,7 @@ function scoreAccessibility(
   const hero = findVisibleSection(project, "hero");
 
   if (ratio < 4.5) {
-    issues.push("Theme text and background contrast may be insufficient.");
+    issues.push("主题文字和背景对比度可能不足。");
     suggestions.push({
       id: "improve-theme-contrast",
       severity: "medium",
@@ -210,12 +210,12 @@ function scoreAccessibility(
   }
 
   if (hero && !(hero.content as HeroContent).imagePlaceholder.trim()) {
-    issues.push("Hero image placeholder is empty.");
+    issues.push("首屏图片占位说明为空。");
   }
 
   collectCtaLabels(project).forEach((label) => {
     if (!label.trim()) {
-      issues.push("A CTA label is empty.");
+      issues.push("存在空的行动按钮文案。");
     }
   });
 
@@ -227,12 +227,12 @@ function scoreContent(
   suggestions: QualitySuggestion[],
 ): QualityDimension {
   const issues: string[] = [];
-  const vagueWords = ["lorem", "placeholder", "todo"];
+  const vagueWords = ["lorem", "placeholder", "todo", "占位", "待补充"];
 
   visibleSections(project).forEach((section) => {
     const text = JSON.stringify(section.content).toLowerCase();
     if (vagueWords.some((word) => text.includes(word))) {
-      issues.push(`${section.label} still has placeholder-like content.`);
+      issues.push(`${section.label} 仍有占位感文案。`);
       suggestions.push({
         id: `replace-placeholder-${section.id}`,
         severity: "medium",
@@ -283,4 +283,19 @@ function collectCtaLabels(project: EasyFrontendProject) {
   });
 
   return labels.filter(Boolean);
+}
+
+function sectionTypeLabel(type: string) {
+  return (
+    {
+      header: "页头导航",
+      hero: "首屏",
+      feature_grid: "功能亮点",
+      pricing: "价格方案",
+      faq: "常见问题",
+      cta: "最终行动",
+      footer: "页脚",
+      social_proof: "信任证明",
+    }[type] ?? type
+  );
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import type { QualityScore } from "@/lib/quality/rules";
+import type { QualityDimensionName, QualityScore } from "@/lib/quality/rules";
 
 type Props = {
   score: QualityScore;
@@ -11,8 +11,8 @@ export function QualityPanel({ score }: Props) {
     <section className="border-t border-slate-200 bg-white p-4">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-sm font-semibold text-slate-950">Quality Score</h2>
-          <p className="text-xs text-slate-500">Deterministic checks from the DSL.</p>
+          <h2 className="text-sm font-semibold text-slate-950">质量评分</h2>
+          <p className="text-xs text-slate-500">基于当前页面 DSL 的确定性检查。</p>
         </div>
         <div className="text-3xl font-bold text-slate-950">{score.overall}</div>
       </div>
@@ -20,7 +20,7 @@ export function QualityPanel({ score }: Props) {
         {score.dimensions.map((dimension) => (
           <div key={dimension.name}>
             <div className="flex justify-between text-xs font-medium text-slate-600">
-              <span>{dimension.name}</span>
+              <span>{dimensionNameLabel(dimension.name)}</span>
               <span>{dimension.score}</span>
             </div>
             <div className="mt-1 h-2 overflow-hidden rounded-full bg-slate-100">
@@ -42,4 +42,18 @@ export function QualityPanel({ score }: Props) {
       ) : null}
     </section>
   );
+}
+
+function dimensionNameLabel(name: QualityDimensionName) {
+  return (
+    {
+      "Structure Completeness": "结构完整度",
+      "Visual Hierarchy": "视觉层级",
+      "CTA Clarity": "行动按钮清晰度",
+      "Responsive Readiness": "响应式准备度",
+      "Accessibility Basics": "无障碍基础",
+      "Content Clarity": "内容清晰度",
+      "Export Readiness": "导出准备度",
+    } satisfies Record<QualityDimensionName, string>
+  )[name];
 }

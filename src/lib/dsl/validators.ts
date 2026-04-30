@@ -14,30 +14,30 @@ export const validateProject = (project: EasyFrontendProject): ValidationResult 
   const issues: ValidationIssue[] = [];
 
   if (!project.id) {
-    issues.push({ path: "project.id", message: "Project id is required." });
+    issues.push({ path: "project.id", message: "项目 id 不能为空。" });
   }
 
   if (!project.name) {
-    issues.push({ path: "project.name", message: "Project name is required." });
+    issues.push({ path: "project.name", message: "项目名称不能为空。" });
   }
 
   if (project.pageType !== "landing_page") {
-    issues.push({ path: "project.pageType", message: "Only landing_page is supported." });
+    issues.push({ path: "project.pageType", message: "当前仅支持 landing_page 页面类型。" });
   }
 
   if (!project.theme.primaryColor || !project.theme.backgroundColor || !project.theme.textColor) {
-    issues.push({ path: "project.theme", message: "Theme colors are required." });
+    issues.push({ path: "project.theme", message: "主题颜色不能为空。" });
   }
 
   if (project.pages.length === 0) {
-    issues.push({ path: "project.pages", message: "At least one page is required." });
+    issues.push({ path: "project.pages", message: "项目至少需要一个页面。" });
   }
 
   project.pages.forEach((page, pageIndex) => {
     if (!page.id || !page.name) {
       issues.push({
         path: `project.pages.${pageIndex}`,
-        message: "Page id and name are required.",
+        message: "页面 id 和名称不能为空。",
       });
     }
 
@@ -49,7 +49,7 @@ export const validateProject = (project: EasyFrontendProject): ValidationResult 
       if (sectionIds.has(section.id)) {
         issues.push({
           path: `project.pages.${pageIndex}.sections.${sectionIndex}.id`,
-          message: `Duplicate section id: ${section.id}.`,
+          message: `模块 id 重复：${section.id}。`,
         });
       }
 
@@ -66,22 +66,22 @@ export const validateSection = (
   issues: ValidationIssue[],
 ) => {
   if (!section.id) {
-    issues.push({ path: `${path}.id`, message: "Section id is required." });
+    issues.push({ path: `${path}.id`, message: "模块 id 不能为空。" });
   }
 
   if (!sectionTypes.includes(section.type)) {
-    issues.push({ path: `${path}.type`, message: `Unsupported section type: ${section.type}.` });
+    issues.push({ path: `${path}.type`, message: `不支持的模块类型：${section.type}。` });
   }
 
   if (!section.label) {
-    issues.push({ path: `${path}.label`, message: "Section label is required." });
+    issues.push({ path: `${path}.label`, message: "模块名称不能为空。" });
   }
 
   if (!section.content || typeof section.content !== "object") {
-    issues.push({ path: `${path}.content`, message: "Section content must be an object." });
+    issues.push({ path: `${path}.content`, message: "模块内容必须是对象。" });
   }
 
   if (!section.style) {
-    issues.push({ path: `${path}.style`, message: "Section style is required." });
+    issues.push({ path: `${path}.style`, message: "模块样式不能为空。" });
   }
 };

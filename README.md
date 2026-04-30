@@ -4,9 +4,9 @@ EasyFrontEnd is an AI visual frontend/UI design tool for non-professional users.
 
 The MVP focuses on landing pages for three starter scenarios:
 
-- AI course landing page
-- SaaS product landing page
-- Personal service landing page
+- AI course landing page, shown to customers in Chinese
+- SaaS product landing page, shown to customers in Chinese
+- Personal service landing page, shown to customers in Chinese
 
 ## MVP Scope
 
@@ -14,6 +14,7 @@ The current vertical slice supports:
 
 - Customer-first new project flow
 - Mock AI guided draft generation
+- Chinese customer-facing UI for the main create/edit/export flow
 - DSL-driven landing page rendering
 - Visual section selection and module ordering
 - Beginner-friendly content and style editing
@@ -34,7 +35,7 @@ pnpm install
 pnpm dev
 ```
 
-Open `http://localhost:3000` to create a new landing-page draft. `/editor` is the visual editing workspace. `/preview` renders the sample DSL project as a standalone preview.
+Open `http://localhost:3000` to create a new Chinese landing-page draft. `/editor` is the visual editing workspace. `/preview` renders the sample DSL project as a standalone preview.
 
 ## Validation
 
@@ -62,4 +63,4 @@ AI generation and copy improvement use `src/lib/ai/mockAiAdapter.ts`. The adapte
 
 Project persistence is local to the current browser. Cloud accounts and shared workspaces are not implemented yet.
 
-Use editor `Export JSON` and `Import JSON` when moving an edited project between browsers or devices.
+Use editor `备份` and `恢复` when moving an edited project between browsers or devices.

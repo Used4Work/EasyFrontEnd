@@ -33,6 +33,7 @@ import { DeviceSwitcher, type DeviceMode } from "./DeviceSwitcher";
 import { ExportPanel } from "./ExportPanel";
 import { InspectorPanel } from "./InspectorPanel";
 import { ModuleTree } from "./ModuleTree";
+import { PreviewPanel } from "./PreviewPanel";
 import { QualityPanel } from "./QualityPanel";
 
 export function EditorShell() {
@@ -40,7 +41,8 @@ export function EditorShell() {
   const [selectedSectionId, setSelectedSectionId] = useState("hero-1");
   const [device, setDevice] = useState<DeviceMode>("desktop");
   const [exportOpen, setExportOpen] = useState(false);
-  const [saveStatus, setSaveStatus] = useState("Loading local project");
+  const [previewOpen, setPreviewOpen] = useState(false);
+  const [saveStatus, setSaveStatus] = useState("正在读取本地项目");
   const [storageReady, setStorageReady] = useState(false);
   const importInputRef = useRef<HTMLInputElement>(null);
 
@@ -54,16 +56,16 @@ export function EditorShell() {
       if (result.status === "loaded") {
         setProject(result.project);
         setSelectedSectionId(preferredSectionId(result.project));
-        setSaveStatus("Restored from this browser");
+        setSaveStatus("已恢复本机保存的项目");
       }
 
       if (result.status === "empty") {
-        setSaveStatus("Saved to this browser");
+        setSaveStatus("已保存到本机浏览器");
       }
 
       if (result.status === "invalid") {
         clearProjectStorage(window.localStorage);
-        setSaveStatus("Ignored invalid saved project");
+        setSaveStatus("已忽略无效的本地项目");
       }
 
       setStorageReady(true);
@@ -79,7 +81,7 @@ export function EditorShell() {
 
     const timeoutId = window.setTimeout(() => {
       const result = saveProjectToStorage(window.localStorage, project);
-      setSaveStatus(result.ok ? "Saved to this browser" : "Could not save locally");
+      setSaveStatus(result.ok ? "已保存到本机浏览器" : "本地保存失败");
     }, 0);
 
     return () => window.clearTimeout(timeoutId);
@@ -87,7 +89,7 @@ export function EditorShell() {
 
   const updateProject = (nextProject: EasyFrontendProject) => {
     setProject(nextProject);
-    setSaveStatus("Saving...");
+    setSaveStatus("正在保存...");
   };
 
   const exportProjectJson = () => {
@@ -103,9 +105,9 @@ export function EditorShell() {
       link.click();
       link.remove();
       URL.revokeObjectURL(url);
-      setSaveStatus("Project JSON exported");
+      setSaveStatus("项目备份已下载");
     } catch (error) {
-      setSaveStatus(error instanceof Error ? error.message : "Project JSON export failed");
+      setSaveStatus(error instanceof Error ? error.message : "项目备份失败");
     }
   };
 
@@ -114,13 +116,13 @@ export function EditorShell() {
     const result = parseProjectFileJson(rawJson);
 
     if (!result.ok) {
-      setSaveStatus(`Import failed: ${result.reason}`);
+      setSaveStatus(`恢复失败：${result.reason}`);
       return;
     }
 
     updateProject(result.project);
     setSelectedSectionId(preferredSectionId(result.project));
-    setSaveStatus("Project JSON imported");
+    setSaveStatus("项目已恢复");
   };
 
   return (
@@ -132,16 +134,28 @@ export function EditorShell() {
         </div>
         <div className="flex items-center gap-2">
           <Button onClick={() => window.location.assign("/")} variant="secondary">
-            New Project
+            新建
           </Button>
-          <Button onClick={() => setDevice("desktop")} variant="secondary">
-            Preview
+          <Button
+            onClick={() => {
+              setPreviewOpen(true);
+              setSaveStatus("已打开页面预览");
+            }}
+            variant="secondary"
+          >
+            预览
           </Button>
           <Button onClick={exportProjectJson} variant="secondary">
-            Backup
+            备份
           </Button>
-          <Button onClick={() => importInputRef.current?.click()} variant="secondary">
-            Restore
+          <Button
+            onClick={() => {
+              setSaveStatus("请选择要恢复的项目备份文件");
+              importInputRef.current?.click();
+            }}
+            variant="secondary"
+          >
+            恢复
           </Button>
           <input
             accept="application/json,.json"
@@ -162,11 +176,11 @@ export function EditorShell() {
               clearProjectStorage(window.localStorage);
               updateProject(sampleProject);
               setSelectedSectionId("hero-1");
-              setSaveStatus("Reset to sample project");
+              setSaveStatus("已重置为中文示例项目");
             }}
             variant="secondary"
           >
-            Reset
+            重置
           </Button>
           <Button
             onClick={async () => {
@@ -174,15 +188,24 @@ export function EditorShell() {
                 project,
                 sectionId: selectedSection?.id ?? "",
               });
+              if (result.patch && selectedSection) {
+                updateProject(updateSectionContent(project, selectedSection.id, result.patch));
+              }
               setSaveStatus(result.message);
-              window.setTimeout(() => setSaveStatus("Saved to this browser"), 2200);
+              window.setTimeout(() => setSaveStatus("已保存到本机浏览器"), 2200);
             }}
             variant="secondary"
           >
-            AI Optimize
+            AI 优化
           </Button>
-          <Button onClick={() => setExportOpen(true)} variant="primary">
-            Export
+          <Button
+            onClick={() => {
+              setExportOpen(true);
+              setSaveStatus("已打开导出面板");
+            }}
+            variant="primary"
+          >
+            导出
           </Button>
           <span className="min-w-32 text-right text-xs text-slate-500">{saveStatus}</span>
         </div>
@@ -192,7 +215,12 @@ export function EditorShell() {
         <ModuleTree
           onAdd={(type: SectionType) => {
             const nextProject = addSection(project, type, selectedSection?.id);
+            const newSectionId = findNewSectionId(project, nextProject);
             updateProject(nextProject);
+            if (newSectionId) {
+              setSelectedSectionId(newSectionId);
+            }
+            setSaveStatus("已添加模块");
           }}
           onDelete={(sectionId) => {
             const nextProject = deleteSection(project, sectionId);
@@ -200,11 +228,27 @@ export function EditorShell() {
             if (sectionId === selectedSectionId) {
               setSelectedSectionId(getPrimaryPage(nextProject).sections[0]?.id ?? "");
             }
+            setSaveStatus("已删除模块");
           }}
-          onDuplicate={(sectionId) => updateProject(duplicateSection(project, sectionId))}
-          onMove={(sectionId, direction) => updateProject(reorderSection(project, sectionId, direction))}
+          onDuplicate={(sectionId) => {
+            const nextProject = duplicateSection(project, sectionId);
+            const newSectionId = findNewSectionId(project, nextProject);
+            updateProject(nextProject);
+            if (newSectionId) {
+              setSelectedSectionId(newSectionId);
+            }
+            setSaveStatus("已复制模块");
+          }}
+          onMove={(sectionId, direction) => {
+            updateProject(reorderSection(project, sectionId, direction));
+            setSaveStatus(direction === "up" ? "模块已上移" : "模块已下移");
+          }}
           onSelect={setSelectedSectionId}
-          onToggleVisibility={(sectionId) => updateProject(toggleSectionVisibility(project, sectionId))}
+          onToggleVisibility={(sectionId) => {
+            const section = findSection(project, sectionId);
+            updateProject(toggleSectionVisibility(project, sectionId));
+            setSaveStatus(section?.style.visible ? "已隐藏模块" : "已显示模块");
+          }}
           sections={getPrimaryPage(project).sections}
           selectedSectionId={selectedSectionId}
         />
@@ -212,8 +256,8 @@ export function EditorShell() {
         <main className="flex min-w-0 flex-1 flex-col">
           <div className="flex items-center justify-between border-b border-slate-200 bg-white px-4 py-2">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-normal text-slate-500">Canvas</p>
-              <p className="text-sm text-slate-600">Click any module to edit it.</p>
+              <p className="text-xs font-semibold uppercase tracking-normal text-slate-500">画布</p>
+              <p className="text-sm text-slate-600">点击页面模块即可编辑。</p>
             </div>
             <DeviceSwitcher onChange={setDevice} value={device} />
           </div>
@@ -241,6 +285,13 @@ export function EditorShell() {
       </div>
 
       <ExportPanel onClose={() => setExportOpen(false)} open={exportOpen} project={project} />
+      <PreviewPanel
+        device={device}
+        onClose={() => setPreviewOpen(false)}
+        onDeviceChange={setDevice}
+        open={previewOpen}
+        project={project}
+      />
     </div>
   );
 }
@@ -248,4 +299,9 @@ export function EditorShell() {
 function preferredSectionId(project: EasyFrontendProject) {
   const sections = getPrimaryPage(project).sections;
   return sections.find((section) => section.type === "hero")?.id ?? sections[0]?.id ?? "";
+}
+
+function findNewSectionId(before: EasyFrontendProject, after: EasyFrontendProject) {
+  const beforeIds = new Set(getPrimaryPage(before).sections.map((section) => section.id));
+  return getPrimaryPage(after).sections.find((section) => !beforeIds.has(section.id))?.id;
 }

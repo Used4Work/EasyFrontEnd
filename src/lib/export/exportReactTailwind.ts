@@ -29,7 +29,7 @@ ${sections}
 function primaryHeading(content: Record<string, unknown>) {
   const title = content.title;
   const brand = content.brand;
-  return typeof title === "string" ? title : typeof brand === "string" ? brand : "Landing page section";
+  return typeof title === "string" ? title : typeof brand === "string" ? brand : "落地页模块";
 }
 
 function summaryText(content: Record<string, unknown>) {

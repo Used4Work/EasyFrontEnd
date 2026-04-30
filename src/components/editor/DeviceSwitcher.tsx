@@ -25,7 +25,7 @@ export function DeviceSwitcher({ value, onChange }: Props) {
           size="sm"
           variant="ghost"
         >
-          {mode === "desktop" ? "Desktop" : "Mobile"}
+          {mode === "desktop" ? "桌面" : "手机"}
         </Button>
       ))}
     </div>

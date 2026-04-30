@@ -27,11 +27,11 @@ export const loadProjectFromStorage = (
   try {
     parsed = JSON.parse(rawProject);
   } catch {
-    return { status: "invalid", reason: "Saved project JSON could not be parsed." };
+    return { status: "invalid", reason: "本地保存的项目 JSON 无法解析。" };
   }
 
   if (!looksLikeProject(parsed)) {
-    return { status: "invalid", reason: "Saved project does not match the project shape." };
+    return { status: "invalid", reason: "本地保存的项目结构不正确。" };
   }
 
   const validation = validateProject(parsed);
@@ -63,7 +63,7 @@ export const saveProjectToStorage = (
   try {
     storage.setItem(key, JSON.stringify(project));
   } catch {
-    return { ok: false, reason: "Project could not be saved to browser storage." };
+    return { ok: false, reason: "项目无法保存到浏览器本地存储。" };
   }
 
   return { ok: true };

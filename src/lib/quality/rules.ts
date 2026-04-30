@@ -48,6 +48,15 @@ export const clampScore = (score: number) => Math.max(0, Math.min(100, Math.roun
 
 export const hasWeakCtaLabel = (label: string) => {
   const normalized = label.trim().toLowerCase();
+  const hasChinese = /[\u3400-\u9fff]/.test(normalized);
+
+  if (hasChinese) {
+    return (
+      normalized.length <= 1 ||
+      ["点击这里", "提交", "开始", "更多", "了解更多"].includes(normalized)
+    );
+  }
+
   return (
     normalized.length < 8 ||
     ["click here", "submit", "go", "start", "learn more", "more"].includes(normalized)

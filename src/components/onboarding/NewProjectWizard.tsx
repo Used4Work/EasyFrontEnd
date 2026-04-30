@@ -15,18 +15,18 @@ import { saveProjectToStorage } from "@/lib/persistence/localProjectStorage";
 import { cn } from "@/lib/utils/cn";
 
 const toneOptions: Array<[ToneToken, string]> = [
-  ["business", "Business"],
-  ["modern_saas", "Modern SaaS"],
-  ["education", "Education"],
-  ["playful", "Playful"],
-  ["premium", "Premium"],
+  ["business", "商务稳重"],
+  ["modern_saas", "现代 SaaS"],
+  ["education", "教育亲和"],
+  ["playful", "轻松活泼"],
+  ["premium", "高端专业"],
 ];
 
 export function NewProjectWizard() {
   const router = useRouter();
   const importInputRef = useRef<HTMLInputElement>(null);
   const [answers, setAnswers] = useState<WizardAnswers>(getDefaultWizardAnswers());
-  const [status, setStatus] = useState("Ready");
+  const [status, setStatus] = useState("准备好生成页面草稿");
   const [isGenerating, setIsGenerating] = useState(false);
 
   const selectScenario = (scenario: ScenarioOption) => {
@@ -35,18 +35,18 @@ export function NewProjectWizard() {
 
   const generateDraft = async () => {
     setIsGenerating(true);
-    setStatus("Generating draft");
+    setStatus("正在生成页面草稿...");
 
     const project = await mockAiAdapter.generateLandingPageDraft(answers);
     const result = saveProjectToStorage(window.localStorage, project);
 
     if (!result.ok) {
-      setStatus(result.reason);
+      setStatus(`保存失败：${result.reason}`);
       setIsGenerating(false);
       return;
     }
 
-    setStatus("Draft ready");
+    setStatus("草稿已生成，正在进入编辑器...");
     router.push("/editor");
   };
 
@@ -54,18 +54,18 @@ export function NewProjectWizard() {
     const result = parseProjectFileJson(await file.text());
 
     if (!result.ok) {
-      setStatus(`Restore failed: ${result.reason}`);
+      setStatus(`恢复失败：${result.reason}`);
       return;
     }
 
     const saveResult = saveProjectToStorage(window.localStorage, result.project);
 
     if (!saveResult.ok) {
-      setStatus(saveResult.reason);
+      setStatus(`保存失败：${saveResult.reason}`);
       return;
     }
 
-    setStatus("Project restored");
+    setStatus("项目已恢复，正在进入编辑器...");
     router.push("/editor");
   };
 
@@ -75,11 +75,11 @@ export function NewProjectWizard() {
         <header className="flex items-center justify-between border-b border-slate-200 pb-4">
           <div>
             <p className="text-xs font-semibold uppercase tracking-normal text-slate-500">EasyFrontEnd</p>
-            <h1 className="mt-1 text-xl font-semibold">Create a landing page draft</h1>
+            <h1 className="mt-1 text-xl font-semibold">创建一个前端页面草稿</h1>
           </div>
           <div className="flex items-center gap-2">
             <Button onClick={() => importInputRef.current?.click()} variant="secondary">
-              Restore Backup
+              恢复备份
             </Button>
             <input
               accept="application/json,.json"
@@ -101,7 +101,7 @@ export function NewProjectWizard() {
         <section className="grid min-h-0 flex-1 gap-5 py-5 lg:grid-cols-[360px_1fr]">
           <aside className="space-y-5">
             <section className="rounded-lg border border-slate-200 bg-white p-4">
-              <h2 className="text-sm font-semibold">Page Type</h2>
+              <h2 className="text-sm font-semibold">选择页面场景</h2>
               <div className="mt-3 space-y-2">
                 {scenarioOptions.map((scenario) => (
                   <button
@@ -125,7 +125,7 @@ export function NewProjectWizard() {
             </section>
 
             <section className="rounded-lg border border-slate-200 bg-white p-4">
-              <h2 className="text-sm font-semibold">Draft Details</h2>
+              <h2 className="text-sm font-semibold">填写草稿信息</h2>
               <div className="mt-4 space-y-4">
                 <TextField
                   label="Audience"
@@ -156,26 +156,26 @@ export function NewProjectWizard() {
 
           <section className="flex min-h-0 flex-col rounded-lg border border-slate-200 bg-white">
             <div className="border-b border-slate-200 p-5">
-              <p className="text-xs font-semibold uppercase tracking-normal text-slate-500">Draft Brief</p>
+              <p className="text-xs font-semibold uppercase tracking-normal text-slate-500">页面草稿摘要</p>
               <h2 className="mt-2 text-3xl font-bold leading-tight">
-                {answers.offer} for {answers.audience}
+                为「{answers.audience}」设计「{answers.offer}」
               </h2>
               <p className="mt-3 max-w-3xl leading-7 text-slate-600">
-                The generated draft will use editable sections for message, proof, pricing, FAQ, and a final call to action.
+                系统会生成一个可编辑的落地页结构，包括首屏、痛点、功能、信任证明、价格、FAQ 和最终行动按钮。
               </p>
             </div>
 
             <div className="grid gap-4 p-5 md:grid-cols-2">
-              <BriefItem label="Scenario" value={scenarioLabel(answers.scenario)} />
-              <BriefItem label="Primary Action" value={answers.primaryAction} />
-              <BriefItem label="Tone" value={toneLabel(answers.tone)} />
-              <BriefItem label="Output" value="Landing page DSL" />
+              <BriefItem label="页面场景" value={scenarioLabel(answers.scenario)} />
+              <BriefItem label="主要行动" value={answers.primaryAction} />
+              <BriefItem label="整体语气" value={toneLabel(answers.tone)} />
+              <BriefItem label="生成结果" value="可视化编辑页面" />
             </div>
 
             <div className="mt-auto flex items-center justify-between border-t border-slate-200 p-5">
               <span className="text-sm text-slate-500">{status}</span>
               <Button disabled={isGenerating} onClick={generateDraft} variant="primary">
-                {isGenerating ? "Generating" : "Generate Draft"}
+                {isGenerating ? "正在生成" : "生成页面草稿"}
               </Button>
             </div>
           </section>
@@ -195,11 +195,12 @@ function TextField({
   onChange: (value: string) => void;
 }) {
   const id = `start-${label.toLowerCase().replaceAll(" ", "-")}`;
+  const labelText = fieldLabel(label);
 
   return (
     <div>
       <label className="text-xs font-semibold text-slate-500" htmlFor={id}>
-        {label}
+        {labelText}
       </label>
       <input
         className="mt-1 h-10 w-full rounded-md border border-slate-200 px-3 text-sm outline-none focus:border-blue-400"
@@ -223,11 +224,12 @@ function SelectField({
   onChange: (value: string) => void;
 }) {
   const id = `start-${label.toLowerCase().replaceAll(" ", "-")}`;
+  const labelText = fieldLabel(label);
 
   return (
     <div>
       <label className="text-xs font-semibold text-slate-500" htmlFor={id}>
-        {label}
+        {labelText}
       </label>
       <select
         className="mt-1 h-10 w-full rounded-md border border-slate-200 bg-white px-3 text-sm"
@@ -255,9 +257,20 @@ function BriefItem({ label, value }: { label: string; value: string }) {
 }
 
 function scenarioLabel(scenario: WizardAnswers["scenario"]) {
-  return scenarioOptions.find((option) => option.id === scenario)?.label ?? "Landing Page";
+  return scenarioOptions.find((option) => option.id === scenario)?.label ?? "落地页";
 }
 
 function toneLabel(tone: ToneToken) {
-  return toneOptions.find(([value]) => value === tone)?.[1] ?? "Business";
+  return toneOptions.find(([value]) => value === tone)?.[1] ?? "商务稳重";
+}
+
+function fieldLabel(label: string) {
+  return (
+    {
+      Audience: "目标用户",
+      "Offer Name": "产品 / 服务名称",
+      "Primary Action": "希望访客做什么",
+      Tone: "页面语气",
+    }[label] ?? label
+  );
 }

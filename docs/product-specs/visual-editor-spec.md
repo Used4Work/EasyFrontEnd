@@ -2,7 +2,7 @@
 
 ## Editor Layout
 
-The editor has a top bar, left page structure tree, center canvas, and right inspector panel.
+The editor has a top bar, left page structure tree, center canvas, and right inspector panel. The primary customer-facing UI is Chinese.
 
 ## Top Bar
 
@@ -11,6 +11,7 @@ The editor has a top bar, left page structure tree, center canvas, and right ins
 - AI optimize action
 - Export action
 - Save status
+- Backup, restore, reset, preview, export, and AI optimize must show an immediate visible result or status message.
 
 ## Left Structure Tree
 
@@ -24,6 +25,8 @@ The left panel is called page structure, not layers. It shows business modules a
 - Delete
 - Add module
 
+Adding or duplicating a module selects the new module immediately.
+
 ## Center Canvas
 
 The canvas renders the current DSL in real time. It supports desktop and mobile preview modes. Clicking a section selects it and highlights it.
@@ -32,9 +35,9 @@ The canvas renders the current DSL in real time. It supports desktop and mobile 
 
 The inspector has three tabs:
 
-- Content
-- Style
-- Smart Suggestions
+- 内容
+- 样式
+- 智能建议
 
 ## Module Editing Capabilities
 

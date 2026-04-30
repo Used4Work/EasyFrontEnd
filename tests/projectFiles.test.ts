@@ -44,7 +44,7 @@ describe("project file import/export", () => {
   it("rejects invalid JSON", () => {
     const result = parseProjectFileJson("{not-json");
 
-    expect(result).toEqual({ ok: false, reason: "Project file is not valid JSON." });
+    expect(result).toEqual({ ok: false, reason: "项目备份文件不是有效的 JSON。" });
   });
 
   it("rejects unsupported project file versions", () => {
@@ -53,7 +53,7 @@ describe("project file import/export", () => {
 
     const result = parseProjectFileJson(JSON.stringify(wrapped));
 
-    expect(result).toEqual({ ok: false, reason: "Unsupported project file version: 999." });
+    expect(result).toEqual({ ok: false, reason: "不支持的项目备份版本：999。" });
   });
 
   it("rejects invalid project content", () => {
@@ -65,11 +65,11 @@ describe("project file import/export", () => {
     expect(result.ok).toBe(false);
 
     if (!result.ok) {
-      expect(result.reason).toBe("At least one page is required.");
+      expect(result.reason).toBe("项目至少需要一个页面。");
     }
   });
 
   it("creates safe project file names", () => {
-    expect(createProjectFileName(sampleProject)).toBe("ai-course-landing-page.easyfrontend.json");
+    expect(createProjectFileName(sampleProject)).toBe("project-ai-course.easyfrontend.json");
   });
 });

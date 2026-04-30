@@ -20,11 +20,13 @@ EasyFrontEnd has a working MVP and a public GitHub repository. The project is se
 - Local browser persistence for the active project DSL.
 - Portable project JSON import/export for transferring edited DSL across devices.
 - Customer-first start screen for creating or restoring a project before entering the editor.
+- Chinese customer-facing start flow, editor labels, sample content, quality feedback, and export modal.
+- Visible button feedback for preview, AI optimization, module add/copy/move/hide/delete, backup, restore, reset, and export.
 - GitHub Actions CI, issue templates, PR template, and repository operations notes.
 
 ## Current Active Plan
 
-`docs/exec-plans/active/customer-first-project-start.md`
+`docs/exec-plans/active/browser-smoke-and-interaction-hardening.md`
 
 ## Current Known Limits
 

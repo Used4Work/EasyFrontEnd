@@ -17,7 +17,7 @@ type Props = {
 
 export function ExportPanel({ project, open, onClose }: Props) {
   const [mode, setMode] = useState<ExportMode>("html");
-  const [copied, setCopied] = useState(false);
+  const [copyStatus, setCopyStatus] = useState<"idle" | "copied" | "failed">("idle");
   const output = useMemo(
     () => (mode === "html" ? exportHtml(project) : exportReactTailwind(project)),
     [mode, project],
@@ -32,8 +32,8 @@ export function ExportPanel({ project, open, onClose }: Props) {
       <div className="mx-auto flex h-full max-w-5xl flex-col rounded-lg bg-white shadow-2xl">
         <div className="flex items-center justify-between border-b border-slate-200 p-4">
           <div>
-            <h2 className="text-base font-semibold text-slate-950">Export</h2>
-            <p className="text-sm text-slate-500">Generated from the active DSL.</p>
+            <h2 className="text-base font-semibold text-slate-950">导出代码</h2>
+            <p className="text-sm text-slate-500">根据当前页面 DSL 生成，和画布预览使用同一份数据。</p>
           </div>
           <div className="flex items-center gap-2">
             <div className="grid grid-cols-2 rounded-md border border-slate-200 bg-white p-1">
@@ -56,16 +56,24 @@ export function ExportPanel({ project, open, onClose }: Props) {
             </div>
             <Button
               onClick={async () => {
-                await navigator.clipboard.writeText(output);
-                setCopied(true);
-                window.setTimeout(() => setCopied(false), 1200);
+                try {
+                  await navigator.clipboard.writeText(output);
+                  setCopyStatus("copied");
+                } catch {
+                  setCopyStatus("failed");
+                }
+                window.setTimeout(() => setCopyStatus("idle"), 1400);
               }}
               variant="primary"
             >
-              {copied ? "Copied" : "Copy"}
+              {copyStatus === "copied"
+                ? "已复制"
+                : copyStatus === "failed"
+                  ? "复制失败"
+                  : "复制代码"}
             </Button>
             <Button onClick={onClose} variant="ghost">
-              Close
+              关闭
             </Button>
           </div>
         </div>

@@ -89,7 +89,7 @@ export const duplicateSection = (
   const copy: SectionNode = {
     ...structuredClone(source),
     id: `${source.id}-copy-${Date.now()}`,
-    label: `${source.label} Copy`,
+    label: `${source.label} 副本`,
   };
   const sections = [...page.sections];
   sections.splice(currentIndex + 1, 0, copy);
@@ -149,40 +149,40 @@ const createEmptySection = (type: SectionType): SectionNode => {
     case "header":
       return {
         ...base,
-        content: { brand: "New Brand", navItems: [], cta: { label: "Get Started", href: "#" } },
+        content: { brand: "新品牌", navItems: [], cta: { label: "立即咨询", href: "#" } },
       };
     case "hero":
       return {
         ...base,
         content: {
-          eyebrow: "New offer",
-          title: "Describe the outcome visitors want",
-          subtitle: "Explain who this is for and why it matters.",
-          primaryCta: { label: "Get Started", href: "#" },
-          secondaryCta: { label: "Learn More", href: "#" },
-          imagePlaceholder: "Image placeholder",
+          eyebrow: "新的核心卖点",
+          title: "写清访客最想获得的结果",
+          subtitle: "说明这个页面面向谁、能解决什么问题，以及为什么值得继续了解。",
+          primaryCta: { label: "立即预约", href: "#" },
+          secondaryCta: { label: "了解亮点", href: "#" },
+          imagePlaceholder: "产品 / 服务图片占位",
         },
       };
     case "pain_points":
       return {
         ...base,
         content: {
-          title: "The problem your audience feels",
-          items: [{ id: `${id}-item`, title: "Pain point", description: "Describe it simply." }],
+          title: "目标用户正在遇到的问题",
+          items: [{ id: `${id}-item`, title: "核心痛点", description: "用简单语言说明这个痛点。" }],
         },
       };
     case "feature_grid":
       return {
         ...base,
         content: {
-          title: "Key benefits",
-          subtitle: "What visitors can expect.",
+          title: "核心功能与收益",
+          subtitle: "告诉访客他们能得到什么。",
           features: [
             {
               id: `${id}-feature`,
-              title: "Benefit",
-              description: "Describe the value.",
-              icon: "spark",
+              title: "关键收益",
+              description: "说明这个能力带来的具体价值。",
+              icon: "亮点",
             },
           ],
         },
@@ -191,26 +191,26 @@ const createEmptySection = (type: SectionType): SectionNode => {
       return {
         ...base,
         content: {
-          title: "Proof that builds trust",
-          metrics: [{ id: `${id}-metric`, value: "3x", label: "better outcome" }],
-          quotes: [{ id: `${id}-quote`, quote: "A short testimonial.", author: "Customer" }],
+          title: "建立信任的证明",
+          metrics: [{ id: `${id}-metric`, value: "3x", label: "更好的结果" }],
+          quotes: [{ id: `${id}-quote`, quote: "这里放一句真实客户评价。", author: "客户姓名" }],
         },
       };
     case "pricing":
       return {
         ...base,
         content: {
-          title: "Simple pricing",
-          subtitle: "Choose a plan.",
+          title: "简单清晰的价格方案",
+          subtitle: "选择适合当前阶段的方案。",
           plans: [
             {
               id: `${id}-plan`,
-              name: "Starter",
-              price: "$29",
-              description: "For getting started.",
-              benefits: ["Core offer"],
+              name: "入门版",
+              price: "¥199",
+              description: "适合先验证一个页面想法。",
+              benefits: ["核心服务内容"],
               recommended: true,
-              ctaLabel: "Choose Starter",
+              ctaLabel: "选择入门版",
             },
           ],
         },
@@ -219,36 +219,36 @@ const createEmptySection = (type: SectionType): SectionNode => {
       return {
         ...base,
         content: {
-          title: "Common questions",
-          items: [{ id: `${id}-faq`, question: "Question?", answer: "Answer clearly." }],
+          title: "常见问题",
+          items: [{ id: `${id}-faq`, question: "这里写一个问题？", answer: "用清楚的答案降低用户顾虑。" }],
         },
       };
     case "cta":
       return {
         ...base,
         content: {
-          title: "Ready to begin?",
-          subtitle: "Take the next step today.",
-          buttonLabel: "Get Started",
+          title: "准备开始了吗？",
+          subtitle: "让访客清楚知道下一步应该做什么。",
+          buttonLabel: "立即开始",
         },
       };
     case "footer":
       return {
         ...base,
-        content: { brand: "New Brand", description: "Short description.", links: [] },
+        content: { brand: "新品牌", description: "一句话说明品牌或服务。", links: [] },
       };
   }
 };
 
 const labelForType = (type: SectionType) =>
   ({
-    header: "Header / Navigation",
-    hero: "Hero",
-    pain_points: "Pain Points",
-    feature_grid: "Feature Grid",
-    social_proof: "Social Proof",
-    pricing: "Pricing",
-    faq: "FAQ",
-    cta: "Final CTA",
-    footer: "Footer",
+    header: "页头 / 导航",
+    hero: "首屏",
+    pain_points: "用户痛点",
+    feature_grid: "功能亮点",
+    social_proof: "信任证明",
+    pricing: "价格方案",
+    faq: "常见问题",
+    cta: "最终行动",
+    footer: "页脚",
   })[type];

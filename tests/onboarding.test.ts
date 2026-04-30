@@ -15,7 +15,7 @@ describe("onboarding wizard defaults", () => {
 
     expect(saasAnswers.scenario).toBe("saas");
     expect(saasAnswers.offer).toBe("LaunchFlow");
-    expect(saasAnswers.primaryAction).toBe("Start Free Trial");
+    expect(saasAnswers.primaryAction).toBe("免费试用");
     expect(saasAnswers.tone).toBe("modern_saas");
   });
 
