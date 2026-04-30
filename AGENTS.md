@@ -50,6 +50,7 @@ Large features must update or create an active execution plan before implementat
 Use existing project boundaries:
 
 - DSL types, validation, samples, and mutations live in `src/lib/dsl/`.
+- Portable project JSON import/export lives in `src/lib/dsl/projectFiles.ts`.
 - Canvas rendering lives in `src/components/rendered/`.
 - Editor UI lives in `src/components/editor/`.
 - Quality scoring lives in `src/lib/quality/`.

@@ -18,16 +18,17 @@ EasyFrontEnd has a working MVP and a public GitHub repository. The project is se
 - Deterministic quality scoring.
 - HTML and React/Tailwind exporters.
 - Local browser persistence for the active project DSL.
+- Portable project JSON import/export for transferring edited DSL across devices.
 - GitHub Actions CI, issue templates, PR template, and repository operations notes.
 
 ## Current Active Plan
 
-`docs/exec-plans/active/lossless-agent-handoff.md`
+`docs/exec-plans/active/portable-project-dsl-import-export.md`
 
 ## Current Known Limits
 
 - AI is mocked; there is no real LLM adapter yet.
-- Project persistence is local browser storage only.
+- Cloud project persistence is not implemented; cross-device transfer uses project JSON files.
 - Exported React/Tailwind is a stable simplified snippet, not a full Next.js project export.
 - There is no Playwright browser smoke test yet.
 - There is no hosted preview deployment yet.

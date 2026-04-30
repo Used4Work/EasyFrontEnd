@@ -20,12 +20,15 @@ EasyFrontEnd uses a DSL-first architecture. The application never treats AI outp
 - `src/lib/export/` owns generated code outputs.
 - `src/lib/ai/` owns replaceable AI adapters. MVP uses mock AI only.
 - `src/lib/persistence/` owns local browser persistence for serialized DSL projects.
+- `src/lib/dsl/projectFiles.ts` owns portable project JSON import/export for the DSL.
 
 ## Data Ownership
 
 The active editor state is an `EasyFrontendProject` object plus transient UI-only state such as selected section id, active inspector tab, device mode, and export modal state. Transient state must never become a second page model.
 
 Browser persistence stores the same `EasyFrontendProject` DSL in localStorage through `src/lib/persistence/localProjectStorage.ts`. Loaded projects are validated before use. Persistence is a storage mechanism only; it does not define a separate editor or export model.
+
+Portable project JSON uses a small wrapper around `EasyFrontendProject` with format and version metadata. Imports are validated before replacing the active DSL.
 
 ## MVP Rendering Strategy
 

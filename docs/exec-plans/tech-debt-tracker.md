@@ -9,7 +9,6 @@
 - Select newly duplicated or newly added sections immediately after mutation.
 - Replace mock AI with a real adapter and environment-based model config.
 - Add cloud persistence and authenticated project history.
-- Add import/export of raw project DSL JSON for cross-device project-state transfer.
 - Add a release checklist once hosted preview deployment exists.
 
 ## Closed
@@ -18,3 +17,4 @@
 - Local browser persistence for the active project DSL is complete.
 - GitHub CI, issue templates, PR template, and repository operations docs are complete.
 - Handoff context, cold-start docs, and repository verification scripts are complete.
+- Portable project JSON import/export for cross-device DSL transfer is complete.

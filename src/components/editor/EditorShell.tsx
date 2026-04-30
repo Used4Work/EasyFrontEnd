@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { mockAiAdapter } from "@/lib/ai/mockAiAdapter";
 import {
@@ -15,6 +15,11 @@ import {
   updateSectionStyle,
   updateTheme,
 } from "@/lib/dsl/mutations";
+import {
+  createProjectFileName,
+  exportProjectFileJson,
+  parseProjectFileJson,
+} from "@/lib/dsl/projectFiles";
 import { sampleProject } from "@/lib/dsl/sampleProjects";
 import type { EasyFrontendProject, SectionType, ToneToken, WizardAnswers } from "@/lib/dsl/types";
 import {
@@ -46,6 +51,7 @@ export function EditorShell() {
   const [exportOpen, setExportOpen] = useState(false);
   const [saveStatus, setSaveStatus] = useState("Loading local project");
   const [storageReady, setStorageReady] = useState(false);
+  const importInputRef = useRef<HTMLInputElement>(null);
 
   const selectedSection = findSection(project, selectedSectionId) ?? getPrimaryPage(project).sections[0];
   const quality = useMemo(() => scoreProject(project), [project]);
@@ -93,6 +99,39 @@ export function EditorShell() {
     setSaveStatus("Saving...");
   };
 
+  const exportProjectJson = () => {
+    try {
+      const json = exportProjectFileJson(project);
+      const blob = new Blob([json], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+
+      link.href = url;
+      link.download = createProjectFileName(project);
+      document.body.append(link);
+      link.click();
+      link.remove();
+      URL.revokeObjectURL(url);
+      setSaveStatus("Project JSON exported");
+    } catch (error) {
+      setSaveStatus(error instanceof Error ? error.message : "Project JSON export failed");
+    }
+  };
+
+  const importProjectJson = async (file: File) => {
+    const rawJson = await file.text();
+    const result = parseProjectFileJson(rawJson);
+
+    if (!result.ok) {
+      setSaveStatus(`Import failed: ${result.reason}`);
+      return;
+    }
+
+    updateProject(result.project);
+    setSelectedSectionId(preferredSectionId(result.project));
+    setSaveStatus("Project JSON imported");
+  };
+
   return (
     <div className="flex h-screen flex-col bg-slate-100 text-slate-950">
       <header className="flex items-center justify-between border-b border-slate-200 bg-white px-4 py-3">
@@ -104,6 +143,26 @@ export function EditorShell() {
           <Button onClick={() => setDevice("desktop")} variant="secondary">
             Preview
           </Button>
+          <Button onClick={exportProjectJson} variant="secondary">
+            Export JSON
+          </Button>
+          <Button onClick={() => importInputRef.current?.click()} variant="secondary">
+            Import JSON
+          </Button>
+          <input
+            accept="application/json,.json"
+            className="hidden"
+            onChange={async (event) => {
+              const file = event.target.files?.[0];
+
+              if (file) {
+                await importProjectJson(file);
+                event.target.value = "";
+              }
+            }}
+            ref={importInputRef}
+            type="file"
+          />
           <Button
             onClick={() => {
               clearProjectStorage(window.localStorage);

@@ -45,10 +45,11 @@ EasyFrontEnd is a DSL-first AI visual frontend/UI designer. The current MVP supp
 - Deterministic quality score.
 - HTML and React/Tailwind export.
 - Local browser persistence for the active project DSL.
+- Portable project JSON export/import for moving edited DSL across devices.
 
 ## Current Active Plan
 
-The active execution plan is `docs/exec-plans/active/lossless-agent-handoff.md`.
+The active execution plan is `docs/exec-plans/active/portable-project-dsl-import-export.md`.
 
 Completed plans are archived in `docs/exec-plans/completed/`.
 
@@ -71,6 +72,8 @@ This verifies required repo context and runs lint, typecheck, tests, and build.
 - Private GitHub repository settings that are only visible in the UI.
 
 If any of those matter, record the decision in docs or move it into a versioned file before switching devices.
+
+To preserve an edited page across devices, use the editor's `Export JSON` action on the old device and `Import JSON` on the new device.
 
 ## Handoff Rule
 

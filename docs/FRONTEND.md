@@ -7,6 +7,7 @@ The frontend is a Next.js App Router application using TypeScript, React, Tailwi
 - `/` redirects to the editor so the product opens on the usable workspace.
 - `/editor` is the primary MVP workspace.
 - `/preview` renders a DSL sample as a standalone preview.
+- The editor top bar includes project JSON import/export for moving the active DSL between devices.
 
 ## Component Boundaries
 
@@ -29,3 +30,4 @@ The editor defaults to beginner mode. Do not expose raw CSS classes, pixel value
 - `QualityPanel` displays deterministic scoring from DSL.
 - `ExportPanel` calls the HTML and React/Tailwind exporters.
 - `localProjectStorage` saves and restores the active DSL from browser localStorage.
+- `projectFiles` exports and imports validated project JSON files.

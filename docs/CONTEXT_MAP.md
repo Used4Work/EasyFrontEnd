@@ -40,6 +40,7 @@ Use this map when a new person or agent needs to find the right context quickly.
 ## Code Ownership
 
 - `src/lib/dsl/`: project schema, samples, validation, and mutations.
+- `src/lib/dsl/projectFiles.ts`: portable project JSON import/export.
 - `src/components/rendered/`: DSL-to-UI rendering.
 - `src/components/editor/`: visual editor UI.
 - `src/lib/quality/`: quality score rules.

@@ -20,6 +20,7 @@ The current vertical slice supports:
 - Deterministic quality scoring
 - HTML and React/Tailwind export from the same DSL
 - Local browser persistence for the active project DSL
+- Project JSON export/import for moving edited DSL across devices
 
 ## Run Locally
 
@@ -59,3 +60,5 @@ The DSL is the source of truth. Preview, visual editing, quality scoring, persis
 AI generation and copy improvement use `src/lib/ai/mockAiAdapter.ts`. The adapter boundary is ready for a real LLM later.
 
 Project persistence is local to the current browser. Cloud accounts and shared workspaces are not implemented yet.
+
+Use editor `Export JSON` and `Import JSON` when moving an edited project between browsers or devices.
