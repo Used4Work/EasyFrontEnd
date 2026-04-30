@@ -16,4 +16,4 @@ The MVP uses `mockAiAdapter` and returns one of the starter DSL projects. Real L
 
 ## Current Implementation
 
-The `/start` route uses the customer-first AI draft flow. Users select a landing-page scenario, adjust audience, offer, primary action, and tone, then generate a draft through `mockAiAdapter`. The generated DSL is saved to browser storage and opened in the editor-first `/` route.
+The `/start` route uses the customer-first AI draft flow and sketch upload flow. Users can select a landing-page scenario, adjust audience, offer, primary action, and tone, then generate a draft through `mockAiAdapter`. They can also upload a hand-drawn sketch image, which is parsed through `mockSketchAdapter`. The generated DSL is saved to browser storage and opened in the editor-first `/` route.

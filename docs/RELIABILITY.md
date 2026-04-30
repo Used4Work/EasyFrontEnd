@@ -11,6 +11,7 @@ EasyFrontEnd reliability depends on keeping preview, editing, scoring, and expor
 - Test exporter output ordering and key content.
 - Test local persistence loading, saving, invalid data handling, and clearing.
 - Test project JSON export/import, unsupported versions, and invalid imported DSL.
+- Test sketch parser output validates as DSL and does not persist uploaded image data.
 - Run lint, typecheck, test, and build before marking work done.
 
 ## Continuous Integration

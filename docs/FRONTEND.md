@@ -5,7 +5,7 @@ The frontend is a Next.js App Router application using TypeScript, React, Tailwi
 ## Routes
 
 - `/` is the primary visual editing workspace.
-- `/start` is the auxiliary AI-assisted draft generator for creating or restoring a project.
+- `/start` is the auxiliary AI-assisted draft generator, sketch uploader, and project restore flow.
 - `/editor` is a compatibility route for the same editor workspace.
 - `/preview` renders a DSL sample as a standalone preview.
 - The editor top bar includes backup/restore actions for moving the active DSL between devices.
@@ -18,6 +18,7 @@ The frontend is a Next.js App Router application using TypeScript, React, Tailwi
 - Shared primitives go in `src/components/ui/`.
 - DSL logic stays outside React components in `src/lib/dsl/`.
 - Local project persistence lives in `src/lib/persistence/`.
+- Sketch parsing adapters live in `src/lib/sketch/`.
 
 ## UI Rules
 
@@ -30,6 +31,8 @@ The product should feel editor-first. AI actions should be secondary controls fo
 Drag reorder is section-level only in the MVP. It must mutate the DSL through `moveSectionToTarget`; do not introduce a separate visual ordering state.
 
 The inspector Smart Suggestions tab should prefer actionable, deterministic local improvements over generic advice. Each action must apply a small DSL patch through existing editor mutation callbacks.
+
+Sketch upload is an auxiliary project creation input. The uploaded image should be parsed through `src/lib/sketch/` into DSL and then discarded; do not store image data as the editable source of truth.
 
 ## Current MVP Components
 

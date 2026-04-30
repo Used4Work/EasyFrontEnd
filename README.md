@@ -16,6 +16,7 @@ The current vertical slice supports:
 - Mock AI guided draft generation
 - Chinese customer-facing UI for the main create/edit/export flow
 - Editor-first home route with AI draft generation moved to `/start`
+- Hand-drawn sketch upload on `/start`, currently parsed by a mock adapter into editable DSL
 - DSL-driven landing page rendering
 - Visual section selection and drag-based module ordering
 - Beginner-friendly content and style editing
@@ -61,6 +62,8 @@ The DSL is the source of truth. Preview, visual editing, quality scoring, persis
 ## Mocked in MVP
 
 AI generation and copy improvement use `src/lib/ai/mockAiAdapter.ts`. The adapter boundary is ready for a real LLM later.
+
+Sketch upload uses `src/lib/sketch/mockSketchAdapter.ts`. It does not yet call a real multimodal vision model.
 
 Project persistence is local to the current browser. Cloud accounts and shared workspaces are not implemented yet.
 

@@ -56,6 +56,7 @@ Use existing project boundaries:
 - Quality scoring lives in `src/lib/quality/`.
 - Export logic lives in `src/lib/export/`.
 - AI integration lives behind adapters in `src/lib/ai/`.
+- Sketch/image parsing lives behind adapters in `src/lib/sketch/`.
 - Tests live in `tests/`.
 - Handoff and cold-start context lives in `HANDOFF.md`, `docs/PROJECT_STATE.md`, and `docs/CONTEXT_MAP.md`.
 
@@ -67,6 +68,7 @@ Do not introduce complex dependencies unless their role can be explained in one 
 - Do not expose raw CSS, Flex, Grid, z-index, px, or rem as default controls.
 - Do not require prompt-only editing for normal page changes.
 - Do not let AI rewrite the whole page in a way that removes user control.
+- Do not store uploaded sketch image data as the editable source of truth.
 - Do not bypass the DSL with hardcoded page state.
 - Do not let export logic and canvas rendering use different page models.
 - Do not allow preview and exported code to drift.

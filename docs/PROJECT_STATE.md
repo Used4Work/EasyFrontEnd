@@ -25,15 +25,17 @@ EasyFrontEnd has a working MVP and a public GitHub repository. The project is se
 - Editor-first home route; `/start` is now the auxiliary AI draft generator.
 - Section-level drag reorder from both the page structure tree and canvas, backed by the DSL mutation layer.
 - Inspector Smart Suggestions can apply deterministic local DSL patches for the selected module.
+- `/start` supports hand-drawn sketch image upload through a mock sketch-to-DSL adapter.
 - GitHub Actions CI, issue templates, PR template, and repository operations notes.
 
 ## Current Active Plan
 
-`docs/exec-plans/active/actionable-smart-suggestions.md`
+`docs/exec-plans/active/sketch-upload-to-dsl.md`
 
 ## Current Known Limits
 
 - AI is mocked; there is no real LLM adapter yet.
+- Sketch parsing is mocked; there is no real multimodal vision parser yet.
 - Cloud project persistence is not implemented; cross-device transfer uses project JSON files.
 - Exported React/Tailwind is a stable simplified snippet, not a full Next.js project export.
 - There is no Playwright browser smoke test yet.

@@ -1,6 +1,7 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/Button";
 import { mockAiAdapter } from "@/lib/ai/mockAiAdapter";
@@ -12,6 +13,7 @@ import {
   type ScenarioOption,
 } from "@/lib/onboarding/wizardDefaults";
 import { saveProjectToStorage } from "@/lib/persistence/localProjectStorage";
+import { mockSketchAdapter } from "@/lib/sketch/mockSketchAdapter";
 import { cn } from "@/lib/utils/cn";
 
 const toneOptions: Array<[ToneToken, string]> = [
@@ -25,9 +27,23 @@ const toneOptions: Array<[ToneToken, string]> = [
 export function NewProjectWizard() {
   const router = useRouter();
   const importInputRef = useRef<HTMLInputElement>(null);
+  const sketchInputRef = useRef<HTMLInputElement>(null);
   const [answers, setAnswers] = useState<WizardAnswers>(getDefaultWizardAnswers());
   const [status, setStatus] = useState("准备好生成页面草稿");
   const [isGenerating, setIsGenerating] = useState(false);
+  const [isParsingSketch, setIsParsingSketch] = useState(false);
+  const [sketchFile, setSketchFile] = useState<File | null>(null);
+  const [sketchPreviewUrl, setSketchPreviewUrl] = useState<string | null>(null);
+  const [sketchNotes, setSketchNotes] = useState<string[]>([]);
+
+  useEffect(
+    () => () => {
+      if (sketchPreviewUrl) {
+        URL.revokeObjectURL(sketchPreviewUrl);
+      }
+    },
+    [sketchPreviewUrl],
+  );
 
   const selectScenario = (scenario: ScenarioOption) => {
     setAnswers(getDefaultWizardAnswers(scenario.id));
@@ -67,6 +83,51 @@ export function NewProjectWizard() {
 
     setStatus("项目已恢复，正在进入可视化编辑器...");
     router.push("/");
+  };
+
+  const selectSketchFile = (file: File) => {
+    if (!file.type.startsWith("image/")) {
+      setStatus("请上传图片格式的手绘草图。");
+      return;
+    }
+
+    setSketchFile(file);
+    setSketchPreviewUrl(URL.createObjectURL(file));
+    setSketchNotes([]);
+    setStatus("草图已选择，可以开始解析。");
+  };
+
+  const parseSketch = async () => {
+    if (!sketchFile) {
+      setStatus("请先上传一张手绘草图。");
+      return;
+    }
+
+    setIsParsingSketch(true);
+    setStatus("正在解析手绘草图...");
+
+    try {
+      const result = await mockSketchAdapter.parseSketchToProject({
+        fileName: sketchFile.name,
+        fileSize: sketchFile.size,
+        imageDataUrl: await readFileAsDataUrl(sketchFile),
+        mimeType: sketchFile.type,
+      });
+      const saveResult = saveProjectToStorage(window.localStorage, result.project);
+
+      if (!saveResult.ok) {
+        setStatus(`保存失败：${saveResult.reason}`);
+        setIsParsingSketch(false);
+        return;
+      }
+
+      setSketchNotes(result.notes);
+      setStatus("草图已解析为可编辑页面，正在进入编辑器...");
+      router.push("/");
+    } catch {
+      setStatus("草图解析失败，请换一张更清晰的图片再试。");
+      setIsParsingSketch(false);
+    }
   };
 
   return (
@@ -152,6 +213,59 @@ export function NewProjectWizard() {
                 />
               </div>
             </section>
+
+            <section className="rounded-lg border border-slate-200 bg-white p-4">
+              <h2 className="text-sm font-semibold">上传手绘草图</h2>
+              <p className="mt-2 text-xs leading-5 text-slate-500">
+                上传纸笔、白板或截图草图，MVP 会用 mock 解析器生成可编辑 DSL。
+              </p>
+              <input
+                accept="image/*"
+                className="hidden"
+                onChange={(event) => {
+                  const file = event.target.files?.[0];
+
+                  if (file) {
+                    selectSketchFile(file);
+                    event.target.value = "";
+                  }
+                }}
+                ref={sketchInputRef}
+                type="file"
+              />
+              <div className="mt-4 space-y-3">
+                <Button onClick={() => sketchInputRef.current?.click()} variant="secondary">
+                  选择草图图片
+                </Button>
+                {sketchPreviewUrl ? (
+                  <div className="overflow-hidden rounded-lg border border-slate-200 bg-slate-50">
+                    <Image
+                      alt="已上传的手绘草图预览"
+                      className="max-h-48 w-full object-contain"
+                      height={360}
+                      src={sketchPreviewUrl}
+                      unoptimized
+                      width={640}
+                    />
+                  </div>
+                ) : null}
+                {sketchFile ? (
+                  <p className="text-xs leading-5 text-slate-500">
+                    已选择：{sketchFile.name}，{formatFileSize(sketchFile.size)}
+                  </p>
+                ) : null}
+                <Button disabled={!sketchFile || isParsingSketch} onClick={parseSketch} variant="primary">
+                  {isParsingSketch ? "正在解析" : "解析草图并构建"}
+                </Button>
+                {sketchNotes.length > 0 ? (
+                  <div className="space-y-1 text-xs leading-5 text-slate-500">
+                    {sketchNotes.map((note) => (
+                      <p key={note}>{note}</p>
+                    ))}
+                  </div>
+                ) : null}
+              </div>
+            </section>
           </aside>
 
           <section className="flex min-h-0 flex-col rounded-lg border border-slate-200 bg-white">
@@ -183,6 +297,28 @@ export function NewProjectWizard() {
       </div>
     </main>
   );
+}
+
+function readFileAsDataUrl(file: File) {
+  return new Promise<string>((resolve, reject) => {
+    const reader = new FileReader();
+
+    reader.addEventListener("load", () => resolve(String(reader.result ?? "")));
+    reader.addEventListener("error", () => reject(reader.error));
+    reader.readAsDataURL(file);
+  });
+}
+
+function formatFileSize(fileSize: number) {
+  if (fileSize < 1024) {
+    return `${fileSize} B`;
+  }
+
+  if (fileSize < 1024 * 1024) {
+    return `${Math.round(fileSize / 1024)} KB`;
+  }
+
+  return `${(fileSize / 1024 / 1024).toFixed(1)} MB`;
 }
 
 function TextField({

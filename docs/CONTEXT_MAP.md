@@ -16,6 +16,7 @@ Use this map when a new person or agent needs to find the right context quickly.
 - `docs/product-specs/mvp-spec.md`
 - `docs/product-specs/visual-editor-spec.md`
 - `docs/product-specs/ai-wizard-spec.md`
+- `docs/product-specs/sketch-import-spec.md`
 - `docs/product-specs/export-spec.md`
 
 ## Design and Architecture Decisions
@@ -46,6 +47,7 @@ Use this map when a new person or agent needs to find the right context quickly.
 - `src/components/editor/`: visual editor UI.
 - `src/components/onboarding/`: customer project start flow.
 - `src/lib/onboarding/`: scenario defaults for draft generation.
+- `src/lib/sketch/`: sketch upload parser adapter boundary and mock parser.
 - `src/lib/quality/`: quality score rules.
 - `src/lib/export/`: HTML and React/Tailwind export.
 - `src/lib/ai/`: AI adapter boundary.

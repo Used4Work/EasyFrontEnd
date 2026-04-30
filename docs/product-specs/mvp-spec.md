@@ -13,6 +13,7 @@ A user opens the visual editor, edits sections by selecting or dragging modules,
 - Landing-page projects only.
 - Editor-first home route.
 - Auxiliary AI-assisted project start flow at `/start`.
+- Auxiliary hand-drawn sketch upload at `/start`, currently parsed by a mock adapter.
 - AI course, SaaS product, and personal service starter scenarios.
 - Chinese customer-facing labels and default generated content for the primary workflow.
 - Mock AI adapter.
@@ -23,6 +24,7 @@ A user opens the visual editor, edits sections by selecting or dragging modules,
 - HTML and React/Tailwind snippet export.
 - Local browser persistence for the active project DSL.
 - Project JSON import/export for cross-device DSL transfer.
+- Sketch image import into editable DSL draft.
 
 ## Non-Goals
 
@@ -38,6 +40,7 @@ A user opens the visual editor, edits sections by selecting or dragging modules,
 - A user can generate a draft locally with mock AI.
 - A Chinese-speaking user starts from `/` in the visual editor.
 - A user can open `/start`, choose a scenario, and return to the editor with a generated DSL draft.
+- A user can open `/start`, upload a sketch image, and return to the editor with a parsed DSL draft.
 - The page renders from DSL.
 - The user can select sections and edit key content.
 - The user can reorder modules by dragging in the structure tree or directly on the canvas.
@@ -54,6 +57,7 @@ Current implementation:
 
 - `/` includes the Chinese visual editor.
 - `/start` includes guided mock draft generation and restore-from-backup.
+- `/start` includes mock sketch upload and parsing into DSL.
 - `/editor` remains a compatibility route for the same editor.
 - `/preview` renders the sample project from DSL.
 - Tests cover DSL validation, content mutation, section reorder, quality scoring, local persistence, project JSON import/export, HTML export order, and React/Tailwind content.
@@ -61,5 +65,6 @@ Current implementation:
 Known MVP simplifications:
 
 - AI is mocked.
+- Sketch parsing is mocked.
 - Exported React/Tailwind is a stable simplified snippet rather than a full production Next.js page.
 - Project persistence is local browser storage plus manual JSON transfer; there is no cloud account or collaboration yet.

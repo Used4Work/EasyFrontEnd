@@ -7,7 +7,7 @@ EasyFrontEnd uses a DSL-first architecture. The application never treats AI outp
 1. The visual editor opens an `EasyFrontendProject` DSL from local storage or the sample project.
 2. The canvas renders the DSL into a live page.
 3. The module tree, canvas drag handlers, and inspector mutate the DSL with controlled helpers.
-4. The auxiliary AI wizard can create a starting DSL draft, and AI optimize can patch the selected section.
+4. The auxiliary AI wizard can create a starting DSL draft, sketch upload can parse an image into a DSL draft, and AI optimize can patch the selected section.
 5. The quality scorer reads the DSL and produces deterministic feedback.
 6. Exporters read the DSL and generate HTML or React/Tailwind snippets.
 
@@ -19,6 +19,7 @@ EasyFrontEnd uses a DSL-first architecture. The application never treats AI outp
 - `src/lib/quality/` owns scoring rules and suggestions.
 - `src/lib/export/` owns generated code outputs.
 - `src/lib/ai/` owns replaceable AI adapters. MVP uses mock AI only.
+- `src/lib/sketch/` owns replaceable sketch/image parsing adapters. MVP uses mock parsing only.
 - `src/lib/persistence/` owns local browser persistence for serialized DSL projects.
 - `src/lib/dsl/projectFiles.ts` owns portable project JSON import/export for the DSL.
 
@@ -29,6 +30,8 @@ The active editor state is an `EasyFrontendProject` object plus transient UI-onl
 Browser persistence stores the same `EasyFrontendProject` DSL in localStorage through `src/lib/persistence/localProjectStorage.ts`. Loaded projects are validated before use. Persistence is a storage mechanism only; it does not define a separate editor or export model.
 
 Portable project JSON uses a small wrapper around `EasyFrontendProject` with format and version metadata. Imports are validated before replacing the active DSL.
+
+Sketch uploads are transient inputs. The parser returns an `EasyFrontendProject` DSL; image bytes are not stored as the editable project model.
 
 ## MVP Rendering Strategy
 
