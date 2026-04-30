@@ -35,6 +35,7 @@ Use this map when a new person or agent needs to find the right context quickly.
 - `docs/RELIABILITY.md`
 - `docs/SECURITY.md`
 - `docs/references/github-repo-operations.md`
+- `docs/references/competitor-product-patterns.md`
 - `scripts/verify-handoff.mjs`
 
 ## Code Ownership
