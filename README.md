@@ -19,6 +19,7 @@ The current vertical slice supports:
 - Desktop and mobile preview modes
 - Deterministic quality scoring
 - HTML and React/Tailwind export from the same DSL
+- Local browser persistence for the active project DSL
 
 ## Run Locally
 
@@ -38,6 +39,8 @@ pnpm test
 pnpm build
 ```
 
+The same validation chain runs in GitHub Actions through `.github/workflows/ci.yml`.
+
 ## Architecture Principle
 
 The DSL is the source of truth. Preview, visual editing, quality scoring, persistence, and export must all read from and write to the EasyFrontEnd project DSL.
@@ -45,3 +48,5 @@ The DSL is the source of truth. Preview, visual editing, quality scoring, persis
 ## Mocked in MVP
 
 AI generation and copy improvement use `src/lib/ai/mockAiAdapter.ts`. The adapter boundary is ready for a real LLM later.
+
+Project persistence is local to the current browser. Cloud accounts and shared workspaces are not implemented yet.

@@ -14,6 +14,7 @@ The frontend is a Next.js App Router application using TypeScript, React, Tailwi
 - Rendered landing-page sections go in `src/components/rendered/`.
 - Shared primitives go in `src/components/ui/`.
 - DSL logic stays outside React components in `src/lib/dsl/`.
+- Local project persistence lives in `src/lib/persistence/`.
 
 ## UI Rules
 
@@ -27,3 +28,4 @@ The editor defaults to beginner mode. Do not expose raw CSS classes, pixel value
 - `InspectorPanel` mutates content, semantic styles, and theme tokens.
 - `QualityPanel` displays deterministic scoring from DSL.
 - `ExportPanel` calls the HTML and React/Tailwind exporters.
+- `localProjectStorage` saves and restores the active DSL from browser localStorage.

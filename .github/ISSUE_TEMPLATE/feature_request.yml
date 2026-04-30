@@ -1,0 +1,49 @@
+name: Feature request
+description: Propose a controlled, DSL-first product improvement.
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: user_problem
+    attributes:
+      label: User problem
+      description: What beginner user problem does this solve?
+    validations:
+      required: true
+  - type: textarea
+    id: proposed_solution
+    attributes:
+      label: Proposed solution
+      description: Describe the smallest useful version.
+    validations:
+      required: true
+  - type: dropdown
+    id: surface
+    attributes:
+      label: Product surface
+      options:
+        - AI wizard
+        - Visual editor
+        - DSL/schema
+        - Renderer
+        - Quality score
+        - Export
+        - Repository harness
+        - Docs
+    validations:
+      required: true
+  - type: textarea
+    id: dsl_impact
+    attributes:
+      label: DSL impact
+      description: Does this require a DSL change, mutation helper, validation rule, or exporter update?
+    validations:
+      required: true
+  - type: checkboxes
+    id: constraints
+    attributes:
+      label: Constraints
+      options:
+        - label: Keeps DSL as source of truth.
+        - label: Does not expose raw CSS as a beginner control.
+        - label: Does not make AI output an uneditable black box.

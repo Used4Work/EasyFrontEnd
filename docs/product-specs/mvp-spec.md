@@ -18,6 +18,7 @@ A user answers a few guided questions, receives a landing-page draft, edits sect
 - Desktop and mobile canvas preview.
 - Deterministic quality score.
 - HTML and React/Tailwind snippet export.
+- Local browser persistence for the active project DSL.
 
 ## Non-Goals
 
@@ -36,6 +37,7 @@ A user answers a few guided questions, receives a landing-page draft, edits sect
 - The user can reorder modules.
 - The user can inspect quality score suggestions.
 - The user can export HTML or React/Tailwind snippets from the same DSL.
+- The user can refresh the editor and recover the last valid local project.
 - Lint, typecheck, tests, and build pass.
 
 ## Current Implementation Status
@@ -44,10 +46,10 @@ Implemented in the first vertical slice:
 
 - `/editor` includes guided mock draft generation, structure tree, canvas, inspector, quality score, and export modal.
 - `/preview` renders the sample project from DSL.
-- Tests cover DSL validation, content mutation, section reorder, quality scoring, HTML export order, and React/Tailwind content.
+- Tests cover DSL validation, content mutation, section reorder, quality scoring, local persistence, HTML export order, and React/Tailwind content.
 
 Known MVP simplifications:
 
 - AI is mocked.
 - Exported React/Tailwind is a stable simplified snippet rather than a full production Next.js page.
-- Project save status is local UI state only; there is no persistence yet.
+- Project persistence is local browser storage only; there is no cloud account or collaboration yet.

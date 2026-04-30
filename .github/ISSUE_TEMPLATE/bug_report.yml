@@ -1,0 +1,55 @@
+name: Bug report
+description: Report a reproducible EasyFrontEnd problem.
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: What happened?
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: List the shortest path that reproduces the problem.
+      placeholder: |
+        1. Open /editor
+        2. Select Hero
+        3. Edit primary CTA
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - DSL
+        - Visual editor
+        - Renderer
+        - Quality score
+        - Export
+        - AI adapter
+        - Docs
+        - Unknown
+    validations:
+      required: true
+  - type: textarea
+    id: validation
+    attributes:
+      label: Validation output
+      description: Paste relevant `pnpm lint`, `pnpm typecheck`, `pnpm test`, or `pnpm build` output.

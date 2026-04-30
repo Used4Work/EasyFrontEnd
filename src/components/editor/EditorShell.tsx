@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { mockAiAdapter } from "@/lib/ai/mockAiAdapter";
 import {
@@ -17,6 +17,11 @@ import {
 } from "@/lib/dsl/mutations";
 import { sampleProject } from "@/lib/dsl/sampleProjects";
 import type { EasyFrontendProject, SectionType, ToneToken, WizardAnswers } from "@/lib/dsl/types";
+import {
+  clearProjectStorage,
+  loadProjectFromStorage,
+  saveProjectToStorage,
+} from "@/lib/persistence/localProjectStorage";
 import { scoreProject } from "@/lib/quality/scoreProject";
 import { CanvasPreview } from "./CanvasPreview";
 import { DeviceSwitcher, type DeviceMode } from "./DeviceSwitcher";
@@ -39,15 +44,53 @@ export function EditorShell() {
   const [selectedSectionId, setSelectedSectionId] = useState("hero-1");
   const [device, setDevice] = useState<DeviceMode>("desktop");
   const [exportOpen, setExportOpen] = useState(false);
-  const [saveStatus, setSaveStatus] = useState("Saved locally");
+  const [saveStatus, setSaveStatus] = useState("Loading local project");
+  const [storageReady, setStorageReady] = useState(false);
 
   const selectedSection = findSection(project, selectedSectionId) ?? getPrimaryPage(project).sections[0];
   const quality = useMemo(() => scoreProject(project), [project]);
 
+  useEffect(() => {
+    const timeoutId = window.setTimeout(() => {
+      const result = loadProjectFromStorage(window.localStorage);
+
+      if (result.status === "loaded") {
+        setProject(result.project);
+        setSelectedSectionId(preferredSectionId(result.project));
+        setSaveStatus("Restored from this browser");
+      }
+
+      if (result.status === "empty") {
+        setSaveStatus("Saved to this browser");
+      }
+
+      if (result.status === "invalid") {
+        clearProjectStorage(window.localStorage);
+        setSaveStatus("Ignored invalid saved project");
+      }
+
+      setStorageReady(true);
+    }, 0);
+
+    return () => window.clearTimeout(timeoutId);
+  }, []);
+
+  useEffect(() => {
+    if (!storageReady) {
+      return;
+    }
+
+    const timeoutId = window.setTimeout(() => {
+      const result = saveProjectToStorage(window.localStorage, project);
+      setSaveStatus(result.ok ? "Saved to this browser" : "Could not save locally");
+    }, 0);
+
+    return () => window.clearTimeout(timeoutId);
+  }, [project, storageReady]);
+
   const updateProject = (nextProject: EasyFrontendProject) => {
     setProject(nextProject);
-    setSaveStatus("Unsaved preview");
-    window.setTimeout(() => setSaveStatus("Saved locally"), 600);
+    setSaveStatus("Saving...");
   };
 
   return (
@@ -62,13 +105,24 @@ export function EditorShell() {
             Preview
           </Button>
           <Button
+            onClick={() => {
+              clearProjectStorage(window.localStorage);
+              updateProject(sampleProject);
+              setSelectedSectionId("hero-1");
+              setSaveStatus("Reset to sample project");
+            }}
+            variant="secondary"
+          >
+            Reset
+          </Button>
+          <Button
             onClick={async () => {
               const result = await mockAiAdapter.improveSectionCopy({
                 project,
                 sectionId: selectedSection?.id ?? "",
               });
               setSaveStatus(result.message);
-              window.setTimeout(() => setSaveStatus("Saved locally"), 2200);
+              window.setTimeout(() => setSaveStatus("Saved to this browser"), 2200);
             }}
             variant="secondary"
           >
@@ -190,6 +244,11 @@ export function EditorShell() {
       <ExportPanel onClose={() => setExportOpen(false)} open={exportOpen} project={project} />
     </div>
   );
+}
+
+function preferredSectionId(project: EasyFrontendProject) {
+  const sections = getPrimaryPage(project).sections;
+  return sections.find((section) => section.type === "hero")?.id ?? sections[0]?.id ?? "";
 }
 
 function Input({
