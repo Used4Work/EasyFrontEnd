@@ -2,7 +2,7 @@
 
 ## Current Status
 
-This is the active plan. Human-simulated browser automation is complete and archived in `docs/exec-plans/completed/human-simulated-browser-automation.md`.
+This is the active plan. Full product human simulation is complete and archived in `docs/exec-plans/completed/full-product-human-simulation.md`.
 
 EasyFrontEnd can currently upload a hand-drawn sketch and map it to a landing-page DSL draft through a mock adapter. The next product step is to make sketch import feel more like a visual UI builder: identify page regions or component blocks, let the user confirm the interpretation, and convert those blocks into editable DSL sections or components.
 

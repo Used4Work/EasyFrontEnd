@@ -1,6 +1,6 @@
 # Plans
 
-Active execution plans live in `docs/exec-plans/active/`. Completed plans move to `docs/exec-plans/completed/`.
+Active execution plans live in `docs/exec-plans/active/`. Deferred plans live in `docs/exec-plans/backlog/`. Completed plans move to `docs/exec-plans/completed/`.
 
 The current active plan is `docs/exec-plans/active/sketch-to-component-dsl-expansion.md`.
 

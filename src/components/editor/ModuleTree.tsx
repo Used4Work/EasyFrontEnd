@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type DragEvent } from "react";
+import { useRef, useState, type DragEvent } from "react";
 import { Button } from "@/components/ui/Button";
 import type { SectionNode, SectionType } from "@/lib/dsl/types";
 import { cn } from "@/lib/utils/cn";
@@ -12,14 +12,25 @@ type Props = {
   selectedSectionId: string;
   onSelect: (sectionId: string) => void;
   onMove: (sectionId: string, direction: "up" | "down") => void;
-  onMoveToTarget: (sectionId: string, targetSectionId: string, position: DropPosition) => void;
+  onMoveToTarget: (
+    sectionId: string,
+    targetSectionId: string,
+    position: DropPosition,
+  ) => void;
   onToggleVisibility: (sectionId: string) => void;
   onDuplicate: (sectionId: string) => void;
   onDelete: (sectionId: string) => void;
   onAdd: (type: SectionType) => void;
 };
 
-const addableTypes: SectionType[] = ["hero", "feature_grid", "social_proof", "pricing", "faq", "cta"];
+const addableTypes: SectionType[] = [
+  "hero",
+  "feature_grid",
+  "social_proof",
+  "pricing",
+  "faq",
+  "cta",
+];
 
 export function ModuleTree({
   sections,
@@ -33,12 +44,14 @@ export function ModuleTree({
   onAdd,
 }: Props) {
   const [draggedSectionId, setDraggedSectionId] = useState<string | null>(null);
+  const draggedSectionIdRef = useRef<string | null>(null);
   const [dropTarget, setDropTarget] = useState<{
     sectionId: string;
     position: DropPosition;
   } | null>(null);
 
   const clearDragState = () => {
+    draggedSectionIdRef.current = null;
     setDraggedSectionId(null);
     setDropTarget(null);
   };
@@ -47,14 +60,18 @@ export function ModuleTree({
     <aside className="flex min-h-0 w-72 flex-col border-r border-slate-200 bg-white">
       <div className="border-b border-slate-200 p-4">
         <h2 className="text-sm font-semibold text-slate-950">页面结构</h2>
-        <p className="mt-1 text-xs leading-5 text-slate-500">拖拽模块调整顺序，点选后在右侧编辑。</p>
+        <p className="mt-1 text-xs leading-5 text-slate-500">
+          拖拽模块调整顺序，点选后在右侧编辑。
+        </p>
       </div>
       <div className="min-h-0 flex-1 space-y-2 overflow-auto p-3">
         {sections.map((section, index) => (
           <div
             className={cn(
               "rounded-lg border p-2 transition",
-              selectedSectionId === section.id ? "border-blue-400 bg-blue-50" : "border-slate-200 bg-white",
+              selectedSectionId === section.id
+                ? "border-blue-400 bg-blue-50"
+                : "border-slate-200 bg-white",
               !section.style.visible && "opacity-55",
               draggedSectionId === section.id && "opacity-40",
               dropTarget?.sectionId === section.id &&
@@ -67,7 +84,9 @@ export function ModuleTree({
             draggable
             onDragEnd={clearDragState}
             onDragOver={(event) => {
-              if (!draggedSectionId || draggedSectionId === section.id) {
+              const sourceId = draggedSectionIdRef.current ?? draggedSectionId;
+
+              if (!sourceId || sourceId === section.id) {
                 return;
               }
 
@@ -81,13 +100,20 @@ export function ModuleTree({
             onDragStart={(event) => {
               event.dataTransfer.effectAllowed = "move";
               event.dataTransfer.setData("text/plain", section.id);
+              draggedSectionIdRef.current = section.id;
               setDraggedSectionId(section.id);
               onSelect(section.id);
             }}
             onDrop={(event) => {
               event.preventDefault();
-              const sourceId = draggedSectionId ?? event.dataTransfer.getData("text/plain");
-              const position = dropTarget?.sectionId === section.id ? dropTarget.position : getDropPosition(event);
+              const sourceId =
+                draggedSectionIdRef.current ??
+                draggedSectionId ??
+                event.dataTransfer.getData("text/plain");
+              const position =
+                dropTarget?.sectionId === section.id
+                  ? dropTarget.position
+                  : getDropPosition(event);
 
               if (sourceId && sourceId !== section.id) {
                 onMoveToTarget(sourceId, section.id, position);
@@ -103,8 +129,12 @@ export function ModuleTree({
               type="button"
             >
               <span className="min-w-0">
-                <span className="block text-sm font-semibold text-slate-900">{section.label}</span>
-                <span className="text-xs text-slate-500">{sectionTypeLabel(section.type)}</span>
+                <span className="block text-sm font-semibold text-slate-900">
+                  {section.label}
+                </span>
+                <span className="text-xs text-slate-500">
+                  {sectionTypeLabel(section.type)}
+                </span>
               </span>
               <span className="flex items-center gap-2 text-xs text-slate-400">
                 <span title="拖拽排序">↕</span>
@@ -164,7 +194,10 @@ export function ModuleTree({
         ))}
       </div>
       <div className="border-t border-slate-200 p-3">
-        <label className="text-xs font-semibold uppercase tracking-normal text-slate-500" htmlFor="add-section">
+        <label
+          className="text-xs font-semibold uppercase tracking-normal text-slate-500"
+          htmlFor="add-section"
+        >
           添加模块
         </label>
         <select

@@ -59,6 +59,7 @@ EasyFrontEnd is a DSL-first AI visual frontend/UI designer. The current MVP supp
 The active execution plan is `docs/exec-plans/active/sketch-to-component-dsl-expansion.md`.
 
 Completed plans are archived in `docs/exec-plans/completed/`.
+Deferred plans live in `docs/exec-plans/backlog/`.
 
 ## Validation Contract
 

@@ -8,7 +8,7 @@ Use this map when a new person or agent needs to find the right context quickly.
 - `AGENTS.md`: agent workflow, prohibited patterns, and definition of done.
 - `ARCHITECTURE.md`: system boundaries and data ownership.
 - `docs/PROJECT_STATE.md`: current implementation state.
-- `docs/PLANS.md`: where active and completed execution plans live.
+- `docs/PLANS.md`: where active, backlog, and completed execution plans live.
 
 ## Product Intent
 
@@ -33,6 +33,7 @@ Use this map when a new person or agent needs to find the right context quickly.
 - `.github/workflows/ci.yml`
 - `.github/pull_request_template.md`
 - `.github/ISSUE_TEMPLATE/`
+- `playwright.config.ts`
 - `docs/RELIABILITY.md`
 - `docs/SECURITY.md`
 - `docs/references/github-repo-operations.md`

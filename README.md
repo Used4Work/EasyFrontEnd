@@ -56,6 +56,14 @@ pnpm exec playwright install chromium
 pnpm test:e2e
 ```
 
+Debugging helpers:
+
+```bash
+pnpm test:e2e:ui
+pnpm test:e2e:debug
+pnpm test:e2e:report
+```
+
 On Ubuntu/WSL, if Chromium reports missing system libraries such as `libnspr4.so`, run:
 
 ```bash

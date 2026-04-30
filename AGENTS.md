@@ -18,12 +18,15 @@ pnpm typecheck
 pnpm test
 pnpm exec playwright install chromium
 pnpm test:e2e
+pnpm test:e2e:ui
+pnpm test:e2e:debug
 pnpm build
 pnpm harness:check
 pnpm handoff:check
 ```
 
 On Ubuntu/WSL, if Playwright Chromium cannot launch because system libraries are missing, ask the human to run `sudo pnpm exec playwright install-deps chromium`. Do not commit downloaded browser binaries or local system libraries.
+Use `pnpm test:e2e:ui`, `pnpm test:e2e:debug`, and `pnpm test:e2e:report` when a browser workflow fails and visual/trace debugging is useful.
 
 ## Cold-Start Protocol
 

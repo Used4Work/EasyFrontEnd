@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import type { EasyFrontendProject } from "@/lib/dsl/types";
 import { RenderSection, type SectionDropPosition } from "./RenderSection";
 
@@ -15,9 +15,15 @@ type Props = {
   ) => void;
 };
 
-export function RenderPage({ project, selectedSectionId, onSectionSelect, onSectionMove }: Props) {
+export function RenderPage({
+  project,
+  selectedSectionId,
+  onSectionSelect,
+  onSectionMove,
+}: Props) {
   const page = project.pages[0];
   const [draggedSectionId, setDraggedSectionId] = useState<string | null>(null);
+  const draggedSectionIdRef = useRef<string | null>(null);
   const [dropTarget, setDropTarget] = useState<{
     sectionId: string;
     position: SectionDropPosition;
@@ -25,6 +31,7 @@ export function RenderPage({ project, selectedSectionId, onSectionSelect, onSect
   const canDragSections = Boolean(onSectionMove);
 
   const clearDragState = () => {
+    draggedSectionIdRef.current = null;
     setDraggedSectionId(null);
     setDropTarget(null);
   };
@@ -41,22 +48,29 @@ export function RenderPage({ project, selectedSectionId, onSectionSelect, onSect
         <RenderSection
           key={section.id}
           draggable={canDragSections}
-          dropPosition={dropTarget?.sectionId === section.id ? dropTarget.position : undefined}
+          dropPosition={
+            dropTarget?.sectionId === section.id ? dropTarget.position : undefined
+          }
           onDragEnd={clearDragState}
           onDragOver={(sectionId, position) => {
-            if (!draggedSectionId || draggedSectionId === sectionId) {
+            const sourceId = draggedSectionIdRef.current ?? draggedSectionId;
+
+            if (!sourceId || sourceId === sectionId) {
               return;
             }
 
             setDropTarget({ sectionId, position });
           }}
           onDragStart={(sectionId) => {
+            draggedSectionIdRef.current = sectionId;
             setDraggedSectionId(sectionId);
             onSectionSelect?.(sectionId);
           }}
           onDrop={(targetSectionId, position) => {
-            if (draggedSectionId && draggedSectionId !== targetSectionId) {
-              onSectionMove?.(draggedSectionId, targetSectionId, position);
+            const sourceId = draggedSectionIdRef.current ?? draggedSectionId;
+
+            if (sourceId && sourceId !== targetSectionId) {
+              onSectionMove?.(sourceId, targetSectionId, position);
             }
 
             clearDragState();

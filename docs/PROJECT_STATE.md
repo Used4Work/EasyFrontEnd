@@ -27,6 +27,7 @@ EasyFrontEnd has a working MVP and a public GitHub repository. The project is se
 - Inspector Smart Suggestions can apply deterministic local DSL patches for the selected module.
 - `/start` supports hand-drawn sketch image upload through a mock sketch-to-DSL adapter.
 - Playwright E2E harness simulates a human sketch upload, editor edit, Smart Suggestion, and export flow.
+- Full product Playwright simulation covers guarded mistakes, AI draft creation, accessibility scanning, content/style editing, module controls, drag reorder, preview, export, backup, restore, and reset.
 - GitHub Actions CI, issue templates, PR template, and repository operations notes.
 
 ## Current Active Plan

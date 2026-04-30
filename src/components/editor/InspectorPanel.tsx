@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useId, useMemo, useState } from "react";
 import { Button } from "@/components/ui/Button";
 import type {
   CTASectionContent,
@@ -42,7 +42,10 @@ export function InspectorPanel({
 }: Props) {
   const [activeTab, setActiveTab] = useState<InspectorTab>("content");
   const sectionSuggestions = useMemo(
-    () => suggestions.filter((suggestion) => !section || suggestion.targetSectionId === section.id),
+    () =>
+      suggestions.filter(
+        (suggestion) => !section || suggestion.targetSectionId === section.id,
+      ),
     [section, suggestions],
   );
 
@@ -50,7 +53,9 @@ export function InspectorPanel({
     return (
       <aside className="w-80 border-l border-slate-200 bg-white p-5">
         <h2 className="text-sm font-semibold">属性面板</h2>
-        <p className="mt-2 text-sm leading-6 text-slate-500">请先在画布或页面结构中选择一个模块。</p>
+        <p className="mt-2 text-sm leading-6 text-slate-500">
+          请先在画布或页面结构中选择一个模块。
+        </p>
       </aside>
     );
   }
@@ -58,17 +63,23 @@ export function InspectorPanel({
   return (
     <aside className="flex min-h-0 w-96 flex-col border-l border-slate-200 bg-white">
       <div className="border-b border-slate-200 p-4">
-        <p className="text-xs font-semibold uppercase tracking-normal text-slate-500">当前模块</p>
+        <p className="text-xs font-semibold uppercase tracking-normal text-slate-500">
+          当前模块
+        </p>
         <h2 className="mt-1 text-base font-semibold text-slate-950">{section.label}</h2>
       </div>
       <div className="grid grid-cols-3 gap-1 border-b border-slate-200 p-2">
-        {([
-          ["content", "内容"],
-          ["style", "样式"],
-          ["suggestions", "智能建议"],
-        ] as const).map(([tab, label]) => (
+        {(
+          [
+            ["content", "内容"],
+            ["style", "样式"],
+            ["suggestions", "智能建议"],
+          ] as const
+        ).map(([tab, label]) => (
           <Button
-            className={cn(activeTab === tab && "bg-slate-900 text-white hover:bg-slate-900")}
+            className={cn(
+              activeTab === tab && "bg-slate-900 text-white hover:bg-slate-900",
+            )}
             key={tab}
             onClick={() => setActiveTab(tab)}
             size="sm"
@@ -110,14 +121,19 @@ function ContentEditor({
   section: SectionNode;
   onContentPatch: (sectionId: string, patch: Record<string, unknown>) => void;
 }) {
-  const patch = (patchValue: Record<string, unknown>) => onContentPatch(section.id, patchValue);
+  const patch = (patchValue: Record<string, unknown>) =>
+    onContentPatch(section.id, patchValue);
 
   switch (section.type) {
     case "header": {
       const content = section.content as HeaderContent;
       return (
         <FieldStack>
-          <TextField label="Brand" value={content.brand} onChange={(brand) => patch({ brand })} />
+          <TextField
+            label="Brand"
+            value={content.brand}
+            onChange={(brand) => patch({ brand })}
+          />
           <TextField
             label="Header CTA"
             value={content.cta.label}
@@ -130,9 +146,21 @@ function ContentEditor({
       const content = section.content as HeroContent;
       return (
         <FieldStack>
-          <TextField label="Eyebrow" value={content.eyebrow} onChange={(eyebrow) => patch({ eyebrow })} />
-          <TextArea label="Title" value={content.title} onChange={(title) => patch({ title })} />
-          <TextArea label="Subtitle" value={content.subtitle} onChange={(subtitle) => patch({ subtitle })} />
+          <TextField
+            label="Eyebrow"
+            value={content.eyebrow}
+            onChange={(eyebrow) => patch({ eyebrow })}
+          />
+          <TextArea
+            label="Title"
+            value={content.title}
+            onChange={(title) => patch({ title })}
+          />
+          <TextArea
+            label="Subtitle"
+            value={content.subtitle}
+            onChange={(subtitle) => patch({ subtitle })}
+          />
           <TextField
             label="Primary Button"
             value={content.primaryCta.label}
@@ -141,7 +169,9 @@ function ContentEditor({
           <TextField
             label="Secondary Button"
             value={content.secondaryCta.label}
-            onChange={(label) => patch({ secondaryCta: { ...content.secondaryCta, label } })}
+            onChange={(label) =>
+              patch({ secondaryCta: { ...content.secondaryCta, label } })
+            }
           />
           <TextField
             label="Image Placeholder"
@@ -155,7 +185,11 @@ function ContentEditor({
       const content = section.content as PainPointsContent;
       return (
         <FieldStack>
-          <TextArea label="Section Title" value={content.title} onChange={(title) => patch({ title })} />
+          <TextArea
+            label="Section Title"
+            value={content.title}
+            onChange={(title) => patch({ title })}
+          />
           {content.items.map((item, index) => (
             <GroupedFields key={item.id} title={`痛点 ${index + 1}`}>
               <TextField
@@ -189,8 +223,16 @@ function ContentEditor({
       const content = section.content as FeatureGridContent;
       return (
         <FieldStack>
-          <TextArea label="Section Title" value={content.title} onChange={(title) => patch({ title })} />
-          <TextArea label="Subtitle" value={content.subtitle} onChange={(subtitle) => patch({ subtitle })} />
+          <TextArea
+            label="Section Title"
+            value={content.title}
+            onChange={(title) => patch({ title })}
+          />
+          <TextArea
+            label="Subtitle"
+            value={content.subtitle}
+            onChange={(subtitle) => patch({ subtitle })}
+          />
           {content.features.map((feature, index) => (
             <GroupedFields key={feature.id} title={`功能 ${index + 1}`}>
               <TextField
@@ -235,7 +277,11 @@ function ContentEditor({
       const content = section.content as SocialProofContent;
       return (
         <FieldStack>
-          <TextArea label="Section Title" value={content.title} onChange={(title) => patch({ title })} />
+          <TextArea
+            label="Section Title"
+            value={content.title}
+            onChange={(title) => patch({ title })}
+          />
           {content.quotes.map((quote, index) => (
             <GroupedFields key={quote.id} title={`评价 ${index + 1}`}>
               <TextArea
@@ -269,8 +315,16 @@ function ContentEditor({
       const content = section.content as PricingContent;
       return (
         <FieldStack>
-          <TextArea label="Section Title" value={content.title} onChange={(title) => patch({ title })} />
-          <TextArea label="Subtitle" value={content.subtitle} onChange={(subtitle) => patch({ subtitle })} />
+          <TextArea
+            label="Section Title"
+            value={content.title}
+            onChange={(title) => patch({ title })}
+          />
+          <TextArea
+            label="Subtitle"
+            value={content.subtitle}
+            onChange={(subtitle) => patch({ subtitle })}
+          />
           {content.plans.map((plan, index) => (
             <GroupedFields key={plan.id} title={`方案 ${index + 1}`}>
               <TextField
@@ -350,7 +404,11 @@ function ContentEditor({
       const content = section.content as FAQContent;
       return (
         <FieldStack>
-          <TextArea label="Section Title" value={content.title} onChange={(title) => patch({ title })} />
+          <TextArea
+            label="Section Title"
+            value={content.title}
+            onChange={(title) => patch({ title })}
+          />
           {content.items.map((item, index) => (
             <GroupedFields key={item.id} title={`问题 ${index + 1}`}>
               <TextArea
@@ -384,9 +442,21 @@ function ContentEditor({
       const content = section.content as CTASectionContent;
       return (
         <FieldStack>
-          <TextArea label="Title" value={content.title} onChange={(title) => patch({ title })} />
-          <TextArea label="Subtitle" value={content.subtitle} onChange={(subtitle) => patch({ subtitle })} />
-          <TextField label="Button" value={content.buttonLabel} onChange={(buttonLabel) => patch({ buttonLabel })} />
+          <TextArea
+            label="Title"
+            value={content.title}
+            onChange={(title) => patch({ title })}
+          />
+          <TextArea
+            label="Subtitle"
+            value={content.subtitle}
+            onChange={(subtitle) => patch({ subtitle })}
+          />
+          <TextField
+            label="Button"
+            value={content.buttonLabel}
+            onChange={(buttonLabel) => patch({ buttonLabel })}
+          />
         </FieldStack>
       );
     }
@@ -394,7 +464,11 @@ function ContentEditor({
       const content = section.content as FooterContent;
       return (
         <FieldStack>
-          <TextField label="Brand" value={content.brand} onChange={(brand) => patch({ brand })} />
+          <TextField
+            label="Brand"
+            value={content.brand}
+            onChange={(brand) => patch({ brand })}
+          />
           <TextArea
             label="Description"
             value={content.description}
@@ -422,7 +496,9 @@ function StyleEditor({
       <SelectField
         label="Module Background"
         onChange={(background) =>
-          onStylePatch(section.id, { background: background as SectionStyle["background"] })
+          onStylePatch(section.id, {
+            background: background as SectionStyle["background"],
+          })
         }
         options={[
           ["default", "默认"],
@@ -434,7 +510,9 @@ function StyleEditor({
       />
       <SelectField
         label="Layout Variant"
-        onChange={(layout) => onStylePatch(section.id, { layout: layout as SectionStyle["layout"] })}
+        onChange={(layout) =>
+          onStylePatch(section.id, { layout: layout as SectionStyle["layout"] })
+        }
         options={[
           ["stacked", "上下排列"],
           ["split", "左右分栏"],
@@ -457,7 +535,9 @@ function StyleEditor({
       />
       <SelectField
         label="Spacing Density"
-        onChange={(spacing) => onStylePatch(section.id, { spacing: spacing as SectionStyle["spacing"] })}
+        onChange={(spacing) =>
+          onStylePatch(section.id, { spacing: spacing as SectionStyle["spacing"] })
+        }
         options={[
           ["compact", "紧凑"],
           ["standard", "标准"],
@@ -525,23 +605,36 @@ function SmartSuggestions({
     "如果模块里卡片或长文案较多，请检查手机预览是否拥挤。",
   ];
 
-  const messages = suggestions.length > 0 ? suggestions.map((suggestion) => suggestion.message) : fallback;
+  const messages =
+    suggestions.length > 0
+      ? suggestions.map((suggestion) => suggestion.message)
+      : fallback;
   const actions = buildSmartActions(section);
 
   return (
     <div className="space-y-3">
       {messages.map((message) => (
-        <div className="rounded-lg border border-slate-200 bg-slate-50 p-3 text-sm leading-6 text-slate-700" key={message}>
+        <div
+          className="rounded-lg border border-slate-200 bg-slate-50 p-3 text-sm leading-6 text-slate-700"
+          key={message}
+        >
           {message}
         </div>
       ))}
       {actions.length > 0 ? (
         <div className="space-y-3 pt-2">
-          <p className="text-xs font-semibold uppercase tracking-normal text-slate-500">可一键应用</p>
+          <p className="text-xs font-semibold uppercase tracking-normal text-slate-500">
+            可一键应用
+          </p>
           {actions.map((action) => (
-            <div className="rounded-lg border border-blue-100 bg-blue-50 p-3" key={action.id}>
+            <div
+              className="rounded-lg border border-blue-100 bg-blue-50 p-3"
+              key={action.id}
+            >
               <div className="text-sm font-semibold text-slate-950">{action.label}</div>
-              <p className="mt-1 text-xs leading-5 text-slate-600">{action.description}</p>
+              <p className="mt-1 text-xs leading-5 text-slate-600">
+                {action.description}
+              </p>
               <Button
                 className="mt-3"
                 onClick={() => {
@@ -595,7 +688,10 @@ function buildSmartActions(section: SectionNode): SmartAction[] {
           label: "强化首屏主按钮",
           description: "主按钮会变成更明确的下一步行动。",
           patch: {
-            primaryCta: { ...content.primaryCta, label: strongerCta(content.primaryCta.label) },
+            primaryCta: {
+              ...content.primaryCta,
+              label: strongerCta(content.primaryCta.label),
+            },
           },
         },
       ];
@@ -658,7 +754,8 @@ function buildSmartActions(section: SectionNode): SmartAction[] {
     }
     case "pricing": {
       const content = section.content as PricingContent;
-      const recommendedPlanId = content.plans.find((plan) => plan.recommended)?.id ?? content.plans[0]?.id;
+      const recommendedPlanId =
+        content.plans.find((plan) => plan.recommended)?.id ?? content.plans[0]?.id;
 
       if (!recommendedPlanId) {
         return [];
@@ -755,12 +852,18 @@ function FieldStack({ children }: { children: React.ReactNode }) {
   return <div className="space-y-5">{children}</div>;
 }
 
-function GroupedFields({ children, title }: { children: React.ReactNode; title: string }) {
+function GroupedFields({
+  children,
+  title,
+}: {
+  children: React.ReactNode;
+  title: string;
+}) {
   return (
-    <div className="space-y-4 rounded-lg border border-slate-200 bg-slate-50 p-3">
-      <h3 className="text-sm font-semibold text-slate-800">{title}</h3>
+    <fieldset className="space-y-4 rounded-lg border border-slate-200 bg-slate-50 p-3">
+      <legend className="px-1 text-sm font-semibold text-slate-800">{title}</legend>
       {children}
-    </div>
+    </fieldset>
   );
 }
 
@@ -773,7 +876,7 @@ function TextField({
   value: string;
   onChange: (value: string) => void;
 }) {
-  const id = label.toLowerCase().replaceAll(" ", "-");
+  const id = useFieldId(label);
   const labelText = fieldLabel(label);
 
   return (
@@ -800,7 +903,7 @@ function TextArea({
   value: string;
   onChange: (value: string) => void;
 }) {
-  const id = label.toLowerCase().replaceAll(" ", "-");
+  const id = useFieldId(label);
   const labelText = fieldLabel(label);
 
   return (
@@ -829,7 +932,7 @@ function SelectField({
   options: Array<[string, string]>;
   onChange: (value: string) => void;
 }) {
-  const id = label.toLowerCase().replaceAll(" ", "-");
+  const id = useFieldId(label);
   const labelText = fieldLabel(label);
 
   return (
@@ -851,6 +954,11 @@ function SelectField({
       </select>
     </div>
   );
+}
+
+function useFieldId(label: string) {
+  const generatedId = useId();
+  return `${generatedId}-${label.toLowerCase().replaceAll(" ", "-")}`;
 }
 
 function fieldLabel(label: string) {
