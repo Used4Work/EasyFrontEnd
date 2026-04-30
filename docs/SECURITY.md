@@ -2,6 +2,8 @@
 
 MVP uses a mock AI adapter and does not require API keys.
 
+`.env.example` documents that no environment variables are required for the current MVP. Real secrets belong in `.env.local`, GitHub repository secrets, or deployment provider secrets, never in committed files.
+
 Future AI integrations must:
 
 - Keep model/API keys in environment variables.

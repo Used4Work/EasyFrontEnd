@@ -24,6 +24,10 @@ The current vertical slice supports:
 ## Run Locally
 
 ```bash
+git clone https://github.com/Used4Work/EasyFrontEnd.git
+cd EasyFrontEnd
+corepack enable
+corepack prepare pnpm@10.33.2 --activate
 pnpm install
 pnpm dev
 ```
@@ -37,9 +41,14 @@ pnpm lint
 pnpm typecheck
 pnpm test
 pnpm build
+pnpm handoff:check
 ```
 
 The same validation chain runs in GitHub Actions through `.github/workflows/ci.yml`.
+
+## Handoff
+
+Use `HANDOFF.md` when switching devices, IDEs, or AI agents. It records the cold-start protocol, current state files, and what GitHub does not contain.
 
 ## Architecture Principle
 

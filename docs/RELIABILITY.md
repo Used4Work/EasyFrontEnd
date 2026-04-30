@@ -4,6 +4,7 @@ EasyFrontEnd reliability depends on keeping preview, editing, scoring, and expor
 
 ## Required Checks
 
+- Verify handoff context with `node scripts/verify-handoff.mjs`.
 - Validate sample DSL projects.
 - Test mutation helpers.
 - Test quality rules.
@@ -20,5 +21,6 @@ GitHub Actions runs the same quality gate on pushes and pull requests to `main`:
 - `pnpm typecheck`
 - `pnpm test`
 - `pnpm build`
+- `pnpm handoff:check` before switching devices or handing off to another agent.
 
 The repository owner should enable branch protection so the `Quality Gate / Lint, Typecheck, Test, Build` check is required before merging.

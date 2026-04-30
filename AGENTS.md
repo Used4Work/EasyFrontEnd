@@ -17,13 +17,29 @@ pnpm lint
 pnpm typecheck
 pnpm test
 pnpm build
+pnpm harness:check
+pnpm handoff:check
 ```
+
+## Cold-Start Protocol
+
+When taking over from a new device, IDE, or agent, do not rely on chat context. Start from the repository:
+
+1. Read `HANDOFF.md`.
+2. Read this file, `ARCHITECTURE.md`, `docs/PROJECT_STATE.md`, `docs/PLANS.md`, and the single active plan in `docs/exec-plans/active/`.
+3. Read the relevant product spec before editing behavior.
+4. Run `pnpm install` if dependencies are missing.
+5. Run `pnpm handoff:check` before making a large change.
+
+If the active plan does not match the requested work, update or replace the active plan first. Completed plans must move to `docs/exec-plans/completed/`.
 
 ## Development Workflow
 
 Before starting any feature, read:
 
+- `HANDOFF.md`
 - `ARCHITECTURE.md`
+- `docs/PROJECT_STATE.md`
 - `docs/PRODUCT_SENSE.md`
 - `docs/FRONTEND.md`
 - Relevant files in `docs/product-specs/`
@@ -40,6 +56,7 @@ Use existing project boundaries:
 - Export logic lives in `src/lib/export/`.
 - AI integration lives behind adapters in `src/lib/ai/`.
 - Tests live in `tests/`.
+- Handoff and cold-start context lives in `HANDOFF.md`, `docs/PROJECT_STATE.md`, and `docs/CONTEXT_MAP.md`.
 
 Do not introduce complex dependencies unless their role can be explained in one short paragraph and documented in the active plan.
 
