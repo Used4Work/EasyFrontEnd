@@ -49,7 +49,20 @@ pnpm build
 pnpm handoff:check
 ```
 
-The same validation chain runs in GitHub Actions through `.github/workflows/ci.yml`.
+For browser-level workflow simulation, install the Playwright browser once and run:
+
+```bash
+pnpm exec playwright install chromium
+pnpm test:e2e
+```
+
+On Ubuntu/WSL, if Chromium reports missing system libraries such as `libnspr4.so`, run:
+
+```bash
+sudo pnpm exec playwright install-deps chromium
+```
+
+The same quality gate and browser E2E flow run in GitHub Actions through `.github/workflows/ci.yml`.
 
 ## Handoff
 

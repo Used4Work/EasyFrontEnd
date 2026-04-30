@@ -19,6 +19,8 @@ corepack enable
 corepack prepare pnpm@10.33.2 --activate
 pnpm install
 pnpm handoff:check
+pnpm exec playwright install chromium
+pnpm test:e2e
 pnpm dev
 ```
 
@@ -40,6 +42,7 @@ EasyFrontEnd is a DSL-first AI visual frontend/UI designer. The current MVP supp
 - Editor-first visual page editing.
 - Auxiliary mock AI guided draft generation at `/start`.
 - Mock hand-drawn sketch image upload at `/start`, parsed into editable DSL.
+- Playwright E2E harness for browser-level human workflow simulation.
 - DSL-rendered landing page preview.
 - Visual section selection, dragging, and editing.
 - Inspector smart suggestions with one-click deterministic local improvements.
@@ -53,7 +56,7 @@ EasyFrontEnd is a DSL-first AI visual frontend/UI designer. The current MVP supp
 
 ## Current Active Plan
 
-The active execution plan is `docs/exec-plans/active/sketch-upload-to-dsl.md`.
+The active execution plan is `docs/exec-plans/active/sketch-to-component-dsl-expansion.md`.
 
 Completed plans are archived in `docs/exec-plans/completed/`.
 
@@ -66,6 +69,8 @@ pnpm handoff:check
 ```
 
 This verifies required repo context and runs lint, typecheck, tests, and build.
+Run `pnpm test:e2e` after installing Playwright Chromium when changing onboarding, editor, persistence, preview, or export flows.
+On Ubuntu/WSL, the human may need to run `sudo pnpm exec playwright install-deps chromium` once so Chromium can launch.
 
 ## What GitHub Does Not Contain
 

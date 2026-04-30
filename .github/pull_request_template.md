@@ -15,6 +15,7 @@
 - [ ] `pnpm lint`
 - [ ] `pnpm typecheck`
 - [ ] `pnpm test`
+- [ ] `pnpm test:e2e` if onboarding, editor, persistence, preview, or export behavior changed
 - [ ] `pnpm build`
 
 ## Notes for Review

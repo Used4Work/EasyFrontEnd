@@ -16,10 +16,14 @@ pnpm dev
 pnpm lint
 pnpm typecheck
 pnpm test
+pnpm exec playwright install chromium
+pnpm test:e2e
 pnpm build
 pnpm harness:check
 pnpm handoff:check
 ```
+
+On Ubuntu/WSL, if Playwright Chromium cannot launch because system libraries are missing, ask the human to run `sudo pnpm exec playwright install-deps chromium`. Do not commit downloaded browser binaries or local system libraries.
 
 ## Cold-Start Protocol
 
@@ -81,6 +85,7 @@ Do not introduce complex dependencies unless their role can be explained in one 
 - TypeScript has no errors.
 - `pnpm lint` passes.
 - `pnpm test` passes.
+- `pnpm test:e2e` passes when the change affects the browser workflow.
 - `pnpm build` passes.
 - Related docs are updated.
 - At least one demonstrable DSL sample project exists.

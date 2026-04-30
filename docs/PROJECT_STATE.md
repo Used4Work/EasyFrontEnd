@@ -26,11 +26,12 @@ EasyFrontEnd has a working MVP and a public GitHub repository. The project is se
 - Section-level drag reorder from both the page structure tree and canvas, backed by the DSL mutation layer.
 - Inspector Smart Suggestions can apply deterministic local DSL patches for the selected module.
 - `/start` supports hand-drawn sketch image upload through a mock sketch-to-DSL adapter.
+- Playwright E2E harness simulates a human sketch upload, editor edit, Smart Suggestion, and export flow.
 - GitHub Actions CI, issue templates, PR template, and repository operations notes.
 
 ## Current Active Plan
 
-`docs/exec-plans/active/sketch-upload-to-dsl.md`
+`docs/exec-plans/active/sketch-to-component-dsl-expansion.md`
 
 ## Current Known Limits
 
@@ -38,7 +39,6 @@ EasyFrontEnd has a working MVP and a public GitHub repository. The project is se
 - Sketch parsing is mocked; there is no real multimodal vision parser yet.
 - Cloud project persistence is not implemented; cross-device transfer uses project JSON files.
 - Exported React/Tailwind is a stable simplified snippet, not a full Next.js project export.
-- There is no Playwright browser smoke test yet.
 - There is no hosted preview deployment yet.
 
 ## Validation
@@ -50,6 +50,10 @@ pnpm lint
 pnpm typecheck
 pnpm test
 pnpm build
+pnpm exec playwright install chromium
+pnpm test:e2e
 ```
 
 `pnpm handoff:check` runs the context checks plus the full quality gate.
+`pnpm test:e2e` runs the browser-level human workflow simulation.
+On Ubuntu/WSL, Playwright may require one manual system dependency install: `sudo pnpm exec playwright install-deps chromium`.

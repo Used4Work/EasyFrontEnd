@@ -38,6 +38,7 @@ Use this map when a new person or agent needs to find the right context quickly.
 - `docs/references/github-repo-operations.md`
 - `docs/references/competitor-product-patterns.md`
 - `scripts/verify-handoff.mjs`
+- `e2e/`: Playwright browser workflow tests and sketch fixtures.
 
 ## Code Ownership
 
@@ -53,3 +54,4 @@ Use this map when a new person or agent needs to find the right context quickly.
 - `src/lib/ai/`: AI adapter boundary.
 - `src/lib/persistence/`: local project persistence.
 - `tests/`: unit tests for DSL, quality, export, and persistence.
+- `e2e/`: browser-level tests that simulate customer workflows.

@@ -18,7 +18,16 @@ const requiredFiles = [
   ".github/pull_request_template.md",
 ];
 
-const requiredScripts = ["dev", "lint", "typecheck", "test", "build", "harness:check", "handoff:check"];
+const requiredScripts = [
+  "dev",
+  "lint",
+  "typecheck",
+  "test",
+  "test:e2e",
+  "build",
+  "harness:check",
+  "handoff:check",
+];
 
 const failures = [];
 
