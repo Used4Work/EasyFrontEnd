@@ -1,5 +1,5 @@
-import { NewProjectWizard } from "@/components/onboarding/NewProjectWizard";
+import { EditorShell } from "@/components/editor/EditorShell";
 
 export default function HomePage() {
-  return <NewProjectWizard />;
+  return <EditorShell />;
 }

@@ -4,10 +4,10 @@ EasyFrontEnd uses a DSL-first architecture. The application never treats AI outp
 
 ## System Flow
 
-1. The AI wizard collects beginner-friendly requirements.
-2. An AI adapter returns an `EasyFrontendProject` DSL draft.
-3. The visual editor renders the DSL into a live page canvas.
-4. The module tree and inspector mutate the DSL with controlled helpers.
+1. The visual editor opens an `EasyFrontendProject` DSL from local storage or the sample project.
+2. The canvas renders the DSL into a live page.
+3. The module tree, canvas drag handlers, and inspector mutate the DSL with controlled helpers.
+4. The auxiliary AI wizard can create a starting DSL draft, and AI optimize can patch the selected section.
 5. The quality scorer reads the DSL and produces deterministic feedback.
 6. Exporters read the DSL and generate HTML or React/Tailwind snippets.
 

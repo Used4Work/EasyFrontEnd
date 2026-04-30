@@ -10,6 +10,8 @@ Users choose page type, industry scenario, tone, overall color, and density.
 
 Users add, remove, hide, duplicate, reorder, and configure sections such as Hero, Pricing, FAQ, and CTA.
 
+In the MVP, section reorder is available through drag interactions in the page structure tree and directly on the rendered canvas. This still changes the DSL, not a separate visual-only layer model.
+
 ## Component-Level Editing
 
 Users edit business content inside a section, such as feature cards, FAQ items, plan benefits, CTA labels, or image placeholders.

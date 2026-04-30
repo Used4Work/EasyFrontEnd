@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Button } from "@/components/ui/Button";
+import type { SectionDropPosition } from "@/components/rendered/RenderSection";
 import { mockAiAdapter } from "@/lib/ai/mockAiAdapter";
 import {
   addSection,
@@ -9,6 +10,7 @@ import {
   duplicateSection,
   findSection,
   getPrimaryPage,
+  moveSectionToTarget,
   reorderSection,
   toggleSectionVisibility,
   updateSectionContent,
@@ -125,16 +127,28 @@ export function EditorShell() {
     setSaveStatus("项目已恢复");
   };
 
+  const moveSectionToDropTarget = (
+    sectionId: string,
+    targetSectionId: string,
+    position: SectionDropPosition,
+  ) => {
+    updateProject(moveSectionToTarget(project, sectionId, targetSectionId, position));
+    setSelectedSectionId(sectionId);
+    setSaveStatus("已通过拖拽调整模块顺序");
+  };
+
   return (
     <div className="flex h-screen flex-col bg-slate-100 text-slate-950">
       <header className="flex items-center justify-between border-b border-slate-200 bg-white px-4 py-3">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-normal text-slate-500">EasyFrontEnd</p>
+          <p className="text-xs font-semibold uppercase tracking-normal text-slate-500">
+            EasyFrontEnd · 可视化前端/UI 编辑器
+          </p>
           <h1 className="text-lg font-semibold">{project.name}</h1>
         </div>
         <div className="flex items-center gap-2">
-          <Button onClick={() => window.location.assign("/")} variant="secondary">
-            新建
+          <Button onClick={() => window.location.assign("/start")} variant="secondary">
+            AI 生成初稿
           </Button>
           <Button
             onClick={() => {
@@ -196,7 +210,7 @@ export function EditorShell() {
             }}
             variant="secondary"
           >
-            AI 优化
+            AI 辅助优化
           </Button>
           <Button
             onClick={() => {
@@ -243,6 +257,7 @@ export function EditorShell() {
             updateProject(reorderSection(project, sectionId, direction));
             setSaveStatus(direction === "up" ? "模块已上移" : "模块已下移");
           }}
+          onMoveToTarget={moveSectionToDropTarget}
           onSelect={setSelectedSectionId}
           onToggleVisibility={(sectionId) => {
             const section = findSection(project, sectionId);
@@ -263,6 +278,7 @@ export function EditorShell() {
           </div>
           <CanvasPreview
             device={device}
+            onMoveSection={moveSectionToDropTarget}
             onSelectSection={setSelectedSectionId}
             project={project}
             selectedSectionId={selectedSectionId}

@@ -46,8 +46,8 @@ export function NewProjectWizard() {
       return;
     }
 
-    setStatus("草稿已生成，正在进入编辑器...");
-    router.push("/editor");
+    setStatus("草稿已生成，正在进入可视化编辑器...");
+    router.push("/");
   };
 
   const restoreProject = async (file: File) => {
@@ -65,8 +65,8 @@ export function NewProjectWizard() {
       return;
     }
 
-    setStatus("项目已恢复，正在进入编辑器...");
-    router.push("/editor");
+    setStatus("项目已恢复，正在进入可视化编辑器...");
+    router.push("/");
   };
 
   return (
@@ -75,7 +75,7 @@ export function NewProjectWizard() {
         <header className="flex items-center justify-between border-b border-slate-200 pb-4">
           <div>
             <p className="text-xs font-semibold uppercase tracking-normal text-slate-500">EasyFrontEnd</p>
-            <h1 className="mt-1 text-xl font-semibold">创建一个前端页面草稿</h1>
+            <h1 className="mt-1 text-xl font-semibold">AI 辅助生成页面初稿</h1>
           </div>
           <div className="flex items-center gap-2">
             <Button onClick={() => importInputRef.current?.click()} variant="secondary">
@@ -161,7 +161,7 @@ export function NewProjectWizard() {
                 为「{answers.audience}」设计「{answers.offer}」
               </h2>
               <p className="mt-3 max-w-3xl leading-7 text-slate-600">
-                系统会生成一个可编辑的落地页结构，包括首屏、痛点、功能、信任证明、价格、FAQ 和最终行动按钮。
+                这里用于快速生成起点。真正的主界面是可视化编辑器，你可以继续拖拽、点选和修改模块。
               </p>
             </div>
 

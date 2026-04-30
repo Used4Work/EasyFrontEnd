@@ -4,8 +4,9 @@ The frontend is a Next.js App Router application using TypeScript, React, Tailwi
 
 ## Routes
 
-- `/` is the customer start screen for creating or restoring a project.
-- `/editor` is the primary MVP workspace.
+- `/` is the primary visual editing workspace.
+- `/start` is the auxiliary AI-assisted draft generator for creating or restoring a project.
+- `/editor` is a compatibility route for the same editor workspace.
 - `/preview` renders a DSL sample as a standalone preview.
 - The editor top bar includes backup/restore actions for moving the active DSL between devices.
 - The customer-facing create, edit, score, preview, backup, restore, and export flow is presented in Chinese.
@@ -24,13 +25,17 @@ The editor defaults to beginner mode. Do not expose raw CSS classes, pixel value
 
 Primary buttons must produce visible feedback: open a panel, change the selected module, mutate the DSL, or update the save/status text.
 
+The product should feel editor-first. AI actions should be secondary controls for draft generation or local optimization, never the only way to edit the page.
+
+Drag reorder is section-level only in the MVP. It must mutate the DSL through `moveSectionToTarget`; do not introduce a separate visual ordering state.
+
 ## Current MVP Components
 
 - `EditorShell` owns transient editor UI state.
 - `NewProjectWizard` owns the customer-first project start flow.
-- `ModuleTree` mutates DSL section order and visibility.
+- `ModuleTree` mutates DSL section order and visibility, including drag-to-reorder.
 - `PreviewPanel` opens a modal preview from the same DSL as the canvas.
-- `CanvasPreview` renders `RenderPage` from DSL.
+- `CanvasPreview` renders `RenderPage` from DSL and supports section-level drag reorder.
 - `InspectorPanel` mutates content, semantic styles, and theme tokens.
 - `QualityPanel` displays deterministic scoring from DSL.
 - `ExportPanel` calls the HTML and React/Tailwind exporters.

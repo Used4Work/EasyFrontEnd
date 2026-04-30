@@ -1,3 +1,4 @@
+import type { DragEvent } from "react";
 import type { SectionNode, ThemeTokens } from "@/lib/dsl/types";
 import { cn } from "@/lib/utils/cn";
 import { CTASection } from "./CTASection";
@@ -11,14 +12,33 @@ import { PricingSection } from "./PricingSection";
 import { getSectionPaddingClass, getSectionStyle, getSectionToneClass } from "./renderHelpers";
 import { SocialProofSection } from "./SocialProofSection";
 
+export type SectionDropPosition = "before" | "after";
+
 type Props = {
   section: SectionNode;
   theme: ThemeTokens;
   selected?: boolean;
   onSelect?: (sectionId: string) => void;
+  draggable?: boolean;
+  dropPosition?: SectionDropPosition;
+  onDragStart?: (sectionId: string) => void;
+  onDragOver?: (sectionId: string, position: SectionDropPosition) => void;
+  onDrop?: (sectionId: string, position: SectionDropPosition) => void;
+  onDragEnd?: () => void;
 };
 
-export function RenderSection({ section, theme, selected = false, onSelect }: Props) {
+export function RenderSection({
+  section,
+  theme,
+  selected = false,
+  onSelect,
+  draggable = false,
+  dropPosition,
+  onDragStart,
+  onDragOver,
+  onDrop,
+  onDragEnd,
+}: Props) {
   if (!section.style.visible) {
     return null;
   }
@@ -31,9 +51,13 @@ export function RenderSection({ section, theme, selected = false, onSelect }: Pr
           ? ""
           : getSectionPaddingClass(section.style.spacing),
         selected && "outline outline-4 outline-blue-500/70 outline-offset-[-4px]",
+        dropPosition === "before" && "border-t-4 border-t-blue-500",
+        dropPosition === "after" && "border-b-4 border-b-blue-500",
         onSelect && "cursor-pointer",
+        draggable && "cursor-grab active:cursor-grabbing",
       )}
       data-section-id={section.id}
+      draggable={draggable}
       onClick={(event) => {
         if (!onSelect) {
           return;
@@ -41,6 +65,33 @@ export function RenderSection({ section, theme, selected = false, onSelect }: Pr
 
         event.stopPropagation();
         onSelect(section.id);
+      }}
+      onDragEnd={() => onDragEnd?.()}
+      onDragOver={(event) => {
+        if (!draggable) {
+          return;
+        }
+
+        event.preventDefault();
+        event.dataTransfer.dropEffect = "move";
+        onDragOver?.(section.id, getDropPosition(event));
+      }}
+      onDragStart={(event) => {
+        if (!draggable) {
+          return;
+        }
+
+        event.dataTransfer.effectAllowed = "move";
+        event.dataTransfer.setData("text/plain", section.id);
+        onDragStart?.(section.id);
+      }}
+      onDrop={(event) => {
+        if (!draggable) {
+          return;
+        }
+
+        event.preventDefault();
+        onDrop?.(section.id, getDropPosition(event));
       }}
       style={getSectionStyle(section, theme)}
     >
@@ -70,4 +121,9 @@ function renderByType(section: SectionNode, theme: ThemeTokens) {
     case "footer":
       return <FooterSection section={section} />;
   }
+}
+
+function getDropPosition(event: DragEvent<HTMLElement>): SectionDropPosition {
+  const rect = event.currentTarget.getBoundingClientRect();
+  return event.clientY < rect.top + rect.height / 2 ? "before" : "after";
 }

@@ -6,17 +6,18 @@ Beginner users who need a landing page but do not know frontend design, CSS, or 
 
 ## Core Scenario
 
-A user answers a few guided questions, receives a landing-page draft, edits sections visually, checks quality feedback, and exports HTML or React/Tailwind code.
+A user opens the visual editor, edits sections by selecting or dragging modules, optionally asks AI to generate a draft or improve a selected module, checks quality feedback, and exports HTML or React/Tailwind code.
 
 ## MVP Scope
 
 - Landing-page projects only.
-- Customer-first project start flow.
+- Editor-first home route.
+- Auxiliary AI-assisted project start flow at `/start`.
 - AI course, SaaS product, and personal service starter scenarios.
 - Chinese customer-facing labels and default generated content for the primary workflow.
 - Mock AI adapter.
 - DSL-driven preview.
-- Section selection, content editing, style editing, ordering, hiding, duplication, deletion, and adding modules.
+- Section selection, content editing, style editing, drag ordering, hiding, duplication, deletion, and adding modules.
 - Desktop and mobile canvas preview.
 - Deterministic quality score.
 - HTML and React/Tailwind snippet export.
@@ -35,10 +36,11 @@ A user answers a few guided questions, receives a landing-page draft, edits sect
 ## Acceptance Criteria
 
 - A user can generate a draft locally with mock AI.
-- A Chinese-speaking user starts from `/`, chooses a scenario, and enters the editor with a generated DSL draft.
+- A Chinese-speaking user starts from `/` in the visual editor.
+- A user can open `/start`, choose a scenario, and return to the editor with a generated DSL draft.
 - The page renders from DSL.
 - The user can select sections and edit key content.
-- The user can reorder modules.
+- The user can reorder modules by dragging in the structure tree or directly on the canvas.
 - Top-bar and module-tree actions provide visible UI feedback.
 - The user can inspect quality score suggestions.
 - The user can export HTML or React/Tailwind snippets from the same DSL.
@@ -50,8 +52,9 @@ A user answers a few guided questions, receives a landing-page draft, edits sect
 
 Current implementation:
 
-- `/` includes guided mock draft generation and restore-from-backup.
-- `/editor` includes Chinese structure tree, canvas, inspector, quality score, preview modal, backup/restore, and export modal.
+- `/` includes the Chinese visual editor.
+- `/start` includes guided mock draft generation and restore-from-backup.
+- `/editor` remains a compatibility route for the same editor.
 - `/preview` renders the sample project from DSL.
 - Tests cover DSL validation, content mutation, section reorder, quality scoring, local persistence, project JSON import/export, HTML export order, and React/Tailwind content.
 

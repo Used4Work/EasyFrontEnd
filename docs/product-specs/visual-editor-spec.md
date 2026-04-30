@@ -2,13 +2,15 @@
 
 ## Editor Layout
 
-The editor has a top bar, left page structure tree, center canvas, and right inspector panel. The primary customer-facing UI is Chinese.
+The editor is the primary product surface and the default route. It has a top bar, left page structure tree, center canvas, and right inspector panel. The primary customer-facing UI is Chinese.
+
+AI is auxiliary. It can generate a first draft from `/start` or optimize a selected module, but routine editing must work through direct visual controls.
 
 ## Top Bar
 
 - Project name
 - Preview entry
-- AI optimize action
+- AI auxiliary optimize action
 - Export action
 - Save status
 - Backup, restore, reset, preview, export, and AI optimize must show an immediate visible result or status message.
@@ -20,16 +22,17 @@ The left panel is called page structure, not layers. It shows business modules a
 - Select module
 - Move up
 - Move down
+- Drag reorder
 - Hide or show
 - Duplicate
 - Delete
 - Add module
 
-Adding or duplicating a module selects the new module immediately.
+Adding or duplicating a module selects the new module immediately. Dragging a module reorders sections in the DSL; it is not a separate visual-only order.
 
 ## Center Canvas
 
-The canvas renders the current DSL in real time. It supports desktop and mobile preview modes. Clicking a section selects it and highlights it.
+The canvas renders the current DSL in real time. It supports desktop and mobile preview modes. Clicking a section selects it and highlights it. Dragging a section reorders modules at section level.
 
 ## Right Inspector Panel
 

@@ -2,9 +2,9 @@
 
 ## Project Overview
 
-EasyFrontEnd is an AI visual frontend/UI designer for beginner users. The core product flow is:
+EasyFrontEnd is a visual frontend/UI editor for beginner users. The editor is the product center and AI is auxiliary. The core product flow is:
 
-Requirements Q&A -> Page DSL -> Visual rendering -> Module editing -> Quality score -> Code export.
+Visual editor -> Page DSL -> Drag/select module editing -> AI-assisted local optimization -> Quality score -> Code export.
 
 The DSL is the single source of truth. UI preview, save state, quality scoring, and export must all be generated from the DSL. AI can draft or suggest changes, but it must not create an uneditable black box.
 

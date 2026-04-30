@@ -3,6 +3,7 @@
 ## Open
 
 - Add Playwright smoke tests for editor selection, mutation, and export flows.
+- Add browser smoke coverage for editor-first `/`, auxiliary `/start`, canvas drag reorder, preview, and export.
 - Expand DSL validation from lightweight runtime checks to schema-level validation.
 - Improve exported React formatting.
 - Strengthen contrast checks for section-level backgrounds and primary buttons.

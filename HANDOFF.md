@@ -37,9 +37,10 @@ Open `http://localhost:3000`.
 
 EasyFrontEnd is a DSL-first AI visual frontend/UI designer. The current MVP supports:
 
-- Mock AI guided draft generation.
+- Editor-first visual page editing.
+- Auxiliary mock AI guided draft generation at `/start`.
 - DSL-rendered landing page preview.
-- Visual section selection and editing.
+- Visual section selection, dragging, and editing.
 - Module ordering, hiding, duplication, deletion, and adding.
 - Desktop and mobile preview.
 - Deterministic quality score.
@@ -50,7 +51,7 @@ EasyFrontEnd is a DSL-first AI visual frontend/UI designer. The current MVP supp
 
 ## Current Active Plan
 
-The active execution plan is `docs/exec-plans/active/browser-smoke-and-interaction-hardening.md`.
+The active execution plan is `docs/exec-plans/active/visual-editor-primary-drag-flow.md`.
 
 Completed plans are archived in `docs/exec-plans/completed/`.
 

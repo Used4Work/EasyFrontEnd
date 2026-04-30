@@ -22,11 +22,13 @@ EasyFrontEnd has a working MVP and a public GitHub repository. The project is se
 - Customer-first start screen for creating or restoring a project before entering the editor.
 - Chinese customer-facing start flow, editor labels, sample content, quality feedback, and export modal.
 - Visible button feedback for preview, AI optimization, module add/copy/move/hide/delete, backup, restore, reset, and export.
+- Editor-first home route; `/start` is now the auxiliary AI draft generator.
+- Section-level drag reorder from both the page structure tree and canvas, backed by the DSL mutation layer.
 - GitHub Actions CI, issue templates, PR template, and repository operations notes.
 
 ## Current Active Plan
 
-`docs/exec-plans/active/browser-smoke-and-interaction-hardening.md`
+`docs/exec-plans/active/visual-editor-primary-drag-flow.md`
 
 ## Current Known Limits
 

@@ -1,5 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { findSection, reorderSection, updateSectionContent } from "@/lib/dsl/mutations";
+import {
+  findSection,
+  moveSectionToTarget,
+  reorderSection,
+  updateSectionContent,
+} from "@/lib/dsl/mutations";
 import { sampleProject } from "@/lib/dsl/sampleProjects";
 import type { HeroContent } from "@/lib/dsl/types";
 import { validateProject } from "@/lib/dsl/validators";
@@ -31,6 +36,15 @@ describe("DSL foundation", () => {
 
     expect(sectionIds[0]).toBe("header-1");
     expect(sectionIds[1]).toBe("pain-1");
+    expect(sectionIds[2]).toBe("hero-1");
+  });
+
+  it("moves sections relative to a drop target", () => {
+    const updated = moveSectionToTarget(sampleProject, "pricing-1", "hero-1", "before");
+    const sectionIds = updated.pages[0].sections.map((section) => section.id);
+
+    expect(sectionIds[0]).toBe("header-1");
+    expect(sectionIds[1]).toBe("pricing-1");
     expect(sectionIds[2]).toBe("hero-1");
   });
 });

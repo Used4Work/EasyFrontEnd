@@ -1,6 +1,6 @@
 # AI Wizard Spec
 
-The AI wizard collects a small set of guided answers and creates an initial landing-page DSL through an adapter.
+The AI wizard is auxiliary. It collects a small set of guided answers and creates an initial landing-page DSL through an adapter, but the primary product surface is the visual editor.
 
 ## MVP Questions
 
@@ -16,4 +16,4 @@ The MVP uses `mockAiAdapter` and returns one of the starter DSL projects. Real L
 
 ## Current Implementation
 
-The root route `/` uses a customer-first project start flow. Users select a landing-page scenario, adjust audience, offer, primary action, and tone, then generate a draft through `mockAiAdapter`. The generated DSL is saved to browser storage and opened in `/editor`.
+The `/start` route uses the customer-first AI draft flow. Users select a landing-page scenario, adjust audience, offer, primary action, and tone, then generate a draft through `mockAiAdapter`. The generated DSL is saved to browser storage and opened in the editor-first `/` route.

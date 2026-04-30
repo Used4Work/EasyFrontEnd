@@ -64,6 +64,37 @@ export const reorderSection = (
   return replacePrimaryPageSections(project, sections);
 };
 
+export const moveSectionToTarget = (
+  project: EasyFrontendProject,
+  sectionId: string,
+  targetSectionId: string,
+  position: "before" | "after",
+): EasyFrontendProject => {
+  if (sectionId === targetSectionId) {
+    return project;
+  }
+
+  const page = getPrimaryPage(project);
+  const sourceIndex = page.sections.findIndex((section) => section.id === sectionId);
+  const targetExists = page.sections.some((section) => section.id === targetSectionId);
+
+  if (sourceIndex < 0 || !targetExists) {
+    return project;
+  }
+
+  const sections = [...page.sections];
+  const [source] = sections.splice(sourceIndex, 1);
+  const targetIndex = sections.findIndex((section) => section.id === targetSectionId);
+
+  if (targetIndex < 0) {
+    return project;
+  }
+
+  sections.splice(position === "after" ? targetIndex + 1 : targetIndex, 0, source);
+
+  return replacePrimaryPageSections(project, sections);
+};
+
 export const toggleSectionVisibility = (
   project: EasyFrontendProject,
   sectionId: string,

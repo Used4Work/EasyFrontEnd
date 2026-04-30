@@ -1,6 +1,6 @@
 # EasyFrontEnd
 
-EasyFrontEnd is an AI visual frontend/UI design tool for non-professional users. It turns guided requirements into a structured page DSL, renders that DSL as a visual editor, lets users adjust sections with beginner-friendly controls, scores the result, and exports frontend code from the same source of truth.
+EasyFrontEnd is a visual frontend/UI editor for non-professional users. The editor is the product center: users directly select, drag, edit, preview, score, and export a structured page DSL. AI is an assistant for creating a first draft or improving a selected module, not the main interface.
 
 The MVP focuses on landing pages for three starter scenarios:
 
@@ -15,8 +15,9 @@ The current vertical slice supports:
 - Customer-first new project flow
 - Mock AI guided draft generation
 - Chinese customer-facing UI for the main create/edit/export flow
+- Editor-first home route with AI draft generation moved to `/start`
 - DSL-driven landing page rendering
-- Visual section selection and module ordering
+- Visual section selection and drag-based module ordering
 - Beginner-friendly content and style editing
 - Desktop and mobile preview modes
 - Deterministic quality scoring
@@ -35,7 +36,7 @@ pnpm install
 pnpm dev
 ```
 
-Open `http://localhost:3000` to create a new Chinese landing-page draft. `/editor` is the visual editing workspace. `/preview` renders the sample DSL project as a standalone preview.
+Open `http://localhost:3000` to start in the visual editing workspace. `/start` opens the AI-assisted draft generator, `/editor` remains a compatibility editor route, and `/preview` renders the sample DSL project as a standalone preview.
 
 ## Validation
 

@@ -1,10 +1,10 @@
 # Product Sense
 
-EasyFrontEnd is not a prompt-to-page toy. The product value is the loop:
+EasyFrontEnd is not a prompt-to-page toy. The product value is the editor-first loop:
 
-AI draft -> visual confirmation -> semantic editing -> quality feedback -> reliable export.
+visual editing -> AI-assisted draft or optimization -> semantic editing -> quality feedback -> reliable export.
 
-The user should feel that AI helps them start and improve, while they remain in control of the final page.
+The user should feel that the page is directly editable through selecting, dragging, and semantic controls. AI helps them start or improve a selected module, while they remain in control of the final page.
 
 ## Core Audience
 
