@@ -13,3 +13,7 @@ The AI wizard collects a small set of guided answers and creates an initial land
 ## MVP Behavior
 
 The MVP uses `mockAiAdapter` and returns one of the starter DSL projects. Real LLM integration must preserve the adapter contract.
+
+## Current Implementation
+
+The root route `/` uses a customer-first project start flow. Users select a landing-page scenario, adjust audience, offer, primary action, and tone, then generate a draft through `mockAiAdapter`. The generated DSL is saved to browser storage and opened in `/editor`.

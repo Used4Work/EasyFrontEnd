@@ -12,6 +12,7 @@ The MVP focuses on landing pages for three starter scenarios:
 
 The current vertical slice supports:
 
+- Customer-first new project flow
 - Mock AI guided draft generation
 - DSL-driven landing page rendering
 - Visual section selection and module ordering
@@ -33,7 +34,7 @@ pnpm install
 pnpm dev
 ```
 
-Open `http://localhost:3000`. The root route redirects to `/editor`, which is the primary MVP surface. `/preview` renders the sample DSL project as a standalone preview.
+Open `http://localhost:3000` to create a new landing-page draft. `/editor` is the visual editing workspace. `/preview` renders the sample DSL project as a standalone preview.
 
 ## Validation
 

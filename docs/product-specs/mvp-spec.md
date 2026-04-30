@@ -11,6 +11,7 @@ A user answers a few guided questions, receives a landing-page draft, edits sect
 ## MVP Scope
 
 - Landing-page projects only.
+- Customer-first project start flow.
 - AI course, SaaS product, and personal service starter scenarios.
 - Mock AI adapter.
 - DSL-driven preview.
@@ -33,6 +34,7 @@ A user answers a few guided questions, receives a landing-page draft, edits sect
 ## Acceptance Criteria
 
 - A user can generate a draft locally with mock AI.
+- A user starts from `/`, chooses a scenario, and enters the editor with a generated DSL draft.
 - The page renders from DSL.
 - The user can select sections and edit key content.
 - The user can reorder modules.
@@ -44,9 +46,10 @@ A user answers a few guided questions, receives a landing-page draft, edits sect
 
 ## Current Implementation Status
 
-Implemented in the first vertical slice:
+Current implementation:
 
-- `/editor` includes guided mock draft generation, structure tree, canvas, inspector, quality score, and export modal.
+- `/` includes guided mock draft generation and restore-from-backup.
+- `/editor` includes structure tree, canvas, inspector, quality score, backup/restore, and export modal.
 - `/preview` renders the sample project from DSL.
 - Tests cover DSL validation, content mutation, section reorder, quality scoring, local persistence, project JSON import/export, HTML export order, and React/Tailwind content.
 

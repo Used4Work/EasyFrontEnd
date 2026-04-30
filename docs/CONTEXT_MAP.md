@@ -43,6 +43,8 @@ Use this map when a new person or agent needs to find the right context quickly.
 - `src/lib/dsl/projectFiles.ts`: portable project JSON import/export.
 - `src/components/rendered/`: DSL-to-UI rendering.
 - `src/components/editor/`: visual editor UI.
+- `src/components/onboarding/`: customer project start flow.
+- `src/lib/onboarding/`: scenario defaults for draft generation.
 - `src/lib/quality/`: quality score rules.
 - `src/lib/export/`: HTML and React/Tailwind export.
 - `src/lib/ai/`: AI adapter boundary.

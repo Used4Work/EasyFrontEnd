@@ -21,7 +21,7 @@ import {
   parseProjectFileJson,
 } from "@/lib/dsl/projectFiles";
 import { sampleProject } from "@/lib/dsl/sampleProjects";
-import type { EasyFrontendProject, SectionType, ToneToken, WizardAnswers } from "@/lib/dsl/types";
+import type { EasyFrontendProject, SectionType } from "@/lib/dsl/types";
 import {
   clearProjectStorage,
   loadProjectFromStorage,
@@ -35,17 +35,8 @@ import { InspectorPanel } from "./InspectorPanel";
 import { ModuleTree } from "./ModuleTree";
 import { QualityPanel } from "./QualityPanel";
 
-const defaultAnswers: WizardAnswers = {
-  scenario: "ai_course",
-  audience: "busy creators",
-  offer: "AI Course Studio",
-  primaryAction: "Book a Free Strategy Call",
-  tone: "education",
-};
-
 export function EditorShell() {
   const [project, setProject] = useState<EasyFrontendProject>(sampleProject);
-  const [answers, setAnswers] = useState<WizardAnswers>(defaultAnswers);
   const [selectedSectionId, setSelectedSectionId] = useState("hero-1");
   const [device, setDevice] = useState<DeviceMode>("desktop");
   const [exportOpen, setExportOpen] = useState(false);
@@ -140,14 +131,17 @@ export function EditorShell() {
           <h1 className="text-lg font-semibold">{project.name}</h1>
         </div>
         <div className="flex items-center gap-2">
+          <Button onClick={() => window.location.assign("/")} variant="secondary">
+            New Project
+          </Button>
           <Button onClick={() => setDevice("desktop")} variant="secondary">
             Preview
           </Button>
           <Button onClick={exportProjectJson} variant="secondary">
-            Export JSON
+            Backup
           </Button>
           <Button onClick={() => importInputRef.current?.click()} variant="secondary">
-            Import JSON
+            Restore
           </Button>
           <input
             accept="application/json,.json"
@@ -193,60 +187,6 @@ export function EditorShell() {
           <span className="min-w-32 text-right text-xs text-slate-500">{saveStatus}</span>
         </div>
       </header>
-
-      <section className="grid gap-3 border-b border-slate-200 bg-white px-4 py-3 md:grid-cols-[180px_1fr_1fr_1fr_160px_auto]">
-        <Select
-          label="Page Type"
-          onChange={(value) =>
-            setAnswers((current) => ({ ...current, scenario: value as WizardAnswers["scenario"] }))
-          }
-          options={[
-            ["ai_course", "AI Course"],
-            ["saas", "SaaS Product"],
-            ["personal_service", "Personal Service"],
-          ]}
-          value={answers.scenario}
-        />
-        <Input
-          label="Audience"
-          onChange={(audience) => setAnswers((current) => ({ ...current, audience }))}
-          value={answers.audience}
-        />
-        <Input
-          label="Offer"
-          onChange={(offer) => setAnswers((current) => ({ ...current, offer }))}
-          value={answers.offer}
-        />
-        <Input
-          label="Primary Action"
-          onChange={(primaryAction) => setAnswers((current) => ({ ...current, primaryAction }))}
-          value={answers.primaryAction}
-        />
-        <Select
-          label="Tone"
-          onChange={(tone) => setAnswers((current) => ({ ...current, tone: tone as ToneToken }))}
-          options={[
-            ["business", "Business"],
-            ["modern_saas", "Modern SaaS"],
-            ["education", "Education"],
-            ["playful", "Playful"],
-            ["premium", "Premium"],
-          ]}
-          value={answers.tone}
-        />
-        <div className="flex items-end">
-          <Button
-            onClick={async () => {
-              const draft = await mockAiAdapter.generateLandingPageDraft(answers);
-              updateProject(draft);
-              setSelectedSectionId("hero-1");
-            }}
-            variant="primary"
-          >
-            Generate Draft
-          </Button>
-        </div>
-      </section>
 
       <div className="flex min-h-0 flex-1">
         <ModuleTree
@@ -308,64 +248,4 @@ export function EditorShell() {
 function preferredSectionId(project: EasyFrontendProject) {
   const sections = getPrimaryPage(project).sections;
   return sections.find((section) => section.type === "hero")?.id ?? sections[0]?.id ?? "";
-}
-
-function Input({
-  label,
-  value,
-  onChange,
-}: {
-  label: string;
-  value: string;
-  onChange: (value: string) => void;
-}) {
-  const id = `wizard-${label.toLowerCase().replaceAll(" ", "-")}`;
-
-  return (
-    <div>
-      <label className="text-xs font-semibold text-slate-500" htmlFor={id}>
-        {label}
-      </label>
-      <input
-        className="mt-1 h-9 w-full rounded-md border border-slate-200 px-3 text-sm outline-none focus:border-blue-400"
-        id={id}
-        onChange={(event) => onChange(event.target.value)}
-        value={value}
-      />
-    </div>
-  );
-}
-
-function Select({
-  label,
-  value,
-  options,
-  onChange,
-}: {
-  label: string;
-  value: string;
-  options: Array<[string, string]>;
-  onChange: (value: string) => void;
-}) {
-  const id = `wizard-${label.toLowerCase().replaceAll(" ", "-")}`;
-
-  return (
-    <div>
-      <label className="text-xs font-semibold text-slate-500" htmlFor={id}>
-        {label}
-      </label>
-      <select
-        className="mt-1 h-9 w-full rounded-md border border-slate-200 bg-white px-3 text-sm"
-        id={id}
-        onChange={(event) => onChange(event.target.value)}
-        value={value}
-      >
-        {options.map(([optionValue, optionLabel]) => (
-          <option key={optionValue} value={optionValue}>
-            {optionLabel}
-          </option>
-        ))}
-      </select>
-    </div>
-  );
 }

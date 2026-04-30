@@ -49,7 +49,7 @@ EasyFrontEnd is a DSL-first AI visual frontend/UI designer. The current MVP supp
 
 ## Current Active Plan
 
-The active execution plan is `docs/exec-plans/active/portable-project-dsl-import-export.md`.
+The active execution plan is `docs/exec-plans/active/customer-first-project-start.md`.
 
 Completed plans are archived in `docs/exec-plans/completed/`.
 
@@ -73,7 +73,7 @@ This verifies required repo context and runs lint, typecheck, tests, and build.
 
 If any of those matter, record the decision in docs or move it into a versioned file before switching devices.
 
-To preserve an edited page across devices, use the editor's `Export JSON` action on the old device and `Import JSON` on the new device.
+To preserve an edited page across devices, use the editor's `Backup` action on the old device and `Restore` on the new device.
 
 ## Handoff Rule
 

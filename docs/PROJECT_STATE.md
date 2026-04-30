@@ -19,11 +19,12 @@ EasyFrontEnd has a working MVP and a public GitHub repository. The project is se
 - HTML and React/Tailwind exporters.
 - Local browser persistence for the active project DSL.
 - Portable project JSON import/export for transferring edited DSL across devices.
+- Customer-first start screen for creating or restoring a project before entering the editor.
 - GitHub Actions CI, issue templates, PR template, and repository operations notes.
 
 ## Current Active Plan
 
-`docs/exec-plans/active/portable-project-dsl-import-export.md`
+`docs/exec-plans/active/customer-first-project-start.md`
 
 ## Current Known Limits
 

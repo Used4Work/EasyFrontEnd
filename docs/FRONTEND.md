@@ -4,10 +4,10 @@ The frontend is a Next.js App Router application using TypeScript, React, Tailwi
 
 ## Routes
 
-- `/` redirects to the editor so the product opens on the usable workspace.
+- `/` is the customer start screen for creating or restoring a project.
 - `/editor` is the primary MVP workspace.
 - `/preview` renders a DSL sample as a standalone preview.
-- The editor top bar includes project JSON import/export for moving the active DSL between devices.
+- The editor top bar includes backup/restore actions for moving the active DSL between devices.
 
 ## Component Boundaries
 
@@ -24,6 +24,7 @@ The editor defaults to beginner mode. Do not expose raw CSS classes, pixel value
 ## Current MVP Components
 
 - `EditorShell` owns transient editor UI state.
+- `NewProjectWizard` owns the customer-first project start flow.
 - `ModuleTree` mutates DSL section order and visibility.
 - `CanvasPreview` renders `RenderPage` from DSL.
 - `InspectorPanel` mutates content, semantic styles, and theme tokens.
